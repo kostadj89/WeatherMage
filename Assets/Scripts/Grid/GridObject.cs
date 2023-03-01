@@ -1,0 +1,62 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GridObject
+{
+    private GridSystem gridSystem;
+    private GridPosition gridCellPosition;
+    private List<Unit> unitsAtGridObject;
+       
+
+    public GridObject(GridSystem gridSystem, GridPosition gridCell)
+    {
+        this.gridSystem = gridSystem;
+        this.gridCellPosition = gridCell;
+        this.unitsAtGridObject = new List<Unit>();
+    }
+
+    public GridObject(GridSystem gridSystem, GridPosition gridCell, List<Unit> unitsAtGridObject) : this(gridSystem, gridCell)
+    {
+        this.unitsAtGridObject = unitsAtGridObject;
+    }
+
+    public void AddUnit(Unit unit)
+    {
+        this.unitsAtGridObject.Add(unit);
+    }
+
+    public void RemoveUnit(Unit unit)
+    {
+        if (this.unitsAtGridObject.Contains(unit))
+        {
+            this.unitsAtGridObject.Remove(unit);
+        }        
+    }
+
+    public Unit GetUnit()
+    {
+        return unitsAtGridObject[0];
+    }
+
+    public List<Unit> GetAllUnits()
+    { 
+        return unitsAtGridObject;
+    }
+
+    public override string ToString()
+    {
+        string unitString = string.Empty;
+        foreach (Unit unit in unitsAtGridObject)
+        {
+            unitString += unit + "\n";
+        }
+        return gridCellPosition.ToString()+ unitString;
+    }
+
+    internal bool IsOccupied()
+    {
+        return unitsAtGridObject.Count > 0;
+    }
+}
