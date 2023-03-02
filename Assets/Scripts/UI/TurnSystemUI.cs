@@ -11,21 +11,28 @@ public class TurnSystemUI : MonoBehaviour
     private TextMeshProUGUI turnText;
     [SerializeField]
     private Button endTurnButton;
+    [SerializeField]
+    private GameObject enemyTurnObjectUI;
     private void Awake()
     {
-        TurnSystem.Instance.OnTurnEnded += UpdateTurnUIOnTurnEnded;
+        
         endTurnButton.onClick.RemoveAllListeners();
         endTurnButton.onClick.AddListener(EndTurnClicked);
     }
     // Start is called before the first frame update
     void Start()
     {
+        TurnSystem.Instance.OnTurnEnded += UpdateTurnUIOnTurnEnded;
         
+        UpdateEnemyTurnVisual();
+        UpdateEndTurnBttnVisibility();
     }
 
     private void UpdateTurnUIOnTurnEnded(object sender, int turnIndex)
     {
         UpdateTextUI(turnIndex);
+        UpdateEnemyTurnVisual();
+        UpdateEndTurnBttnVisibility();
     }
 
     private void UpdateTextUI(int turnIndex)
@@ -42,5 +49,15 @@ public class TurnSystemUI : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void UpdateEnemyTurnVisual()
+    {
+        enemyTurnObjectUI.SetActive(!TurnSystem.Instance.IsPlayerTurn());
+    }
+
+    private void UpdateEndTurnBttnVisibility()
+    {
+        endTurnButton.gameObject.SetActive(TurnSystem.Instance.IsPlayerTurn());
     }
 }

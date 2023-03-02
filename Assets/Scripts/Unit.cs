@@ -31,7 +31,8 @@ public class Unit : MonoBehaviour
 
     private void UpdateUnitOnTurnEnded(object sender, int e)
     {
-        if ((IsEnemy() && !TurnSystem.Instance.IsPlayerTurn())||(!IsEnemy() && TurnSystem.Instance.IsPlayerTurn()))
+        if ((IsEnemy() && !TurnSystem.Instance.IsPlayerTurn()) ||
+            (!IsEnemy() && TurnSystem.Instance.IsPlayerTurn()))
         {
             ResetActionPoints();
             OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);

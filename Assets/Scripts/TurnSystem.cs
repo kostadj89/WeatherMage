@@ -7,6 +7,7 @@ public class TurnSystem : MonoBehaviour
 {
     private int turnNumber = 0;
     private bool isPlayerTurn;
+
     public static TurnSystem Instance;
     public event EventHandler<int> OnTurnEnded;
     private void Awake()
@@ -24,9 +25,8 @@ public class TurnSystem : MonoBehaviour
     void Start()
     {
         turnNumber++;
-        OnTurnEnded?.Invoke(this, turnNumber);
-
         isPlayerTurn= true;
+        OnTurnEnded?.Invoke(this, turnNumber);
     }
 
     // Update is called once per frame

@@ -22,7 +22,7 @@ public class UnitActionSystemUI : MonoBehaviour
         UnitActionSystem.Instance.OnSelectedUnitChanged += ChangeActionsOnUnitSelection;
         UnitActionSystem.Instance.OnSelectedActionChanged += ChangeSelectedActionVisual;
         UnitActionSystem.Instance.OnActionStarted += UpdateActionPointsUIOnActionStarted;
-        TurnSystem.Instance.OnTurnEnded += UpdateActionPointsUIOnTurnEnd;
+        
         Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged;
         ActionButtons = new List<ActionButtonUI>();
     }
@@ -41,6 +41,7 @@ public class UnitActionSystemUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        TurnSystem.Instance.OnTurnEnded += UpdateActionPointsUIOnTurnEnd;
         GetAllActionButtons();
         UpdateSelectedActionVisual();
         UpdateActionPointsUIText();

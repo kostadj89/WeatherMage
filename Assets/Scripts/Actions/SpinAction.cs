@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SpinAction : BaseAction // MonoBehaviour//, IAction
 {
-    private const float spinAngle = 360f;
+    internal const float SPIN_ANGLE = 360f;
     private bool isSpinning;
     private float totalSpinAmount;
 
@@ -31,7 +31,7 @@ public class SpinAction : BaseAction // MonoBehaviour//, IAction
         //    transform.eulerAngles += new Vector3(0, spinAngle * Time.deltaTime, 0);
         //}
 
-        float spinAmount = 100f*Time.deltaTime;
+        float spinAmount = SpinAction.SPIN_ANGLE * Time.deltaTime;
         transform.eulerAngles += new Vector3(0, spinAmount, 0);
 
         totalSpinAmount += spinAmount;

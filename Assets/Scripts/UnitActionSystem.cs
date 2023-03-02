@@ -48,6 +48,8 @@ public class UnitActionSystem : MonoBehaviour
         //if any other action is running do nothing
         if (isBusy) { return; }
 
+        if (!TurnSystem.Instance.IsPlayerTurn()) { return; }
+
         if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
         if (Input.GetMouseButtonDown(0))
