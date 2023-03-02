@@ -12,10 +12,8 @@ public class MoveAction : BaseAction//, IAction
     private const float stopDistanceTreshold = 0.1f;
     private Vector3 targetPosition;
 
-    
-
-    [SerializeField]
-    private Animator unitAnimator;
+    public event EventHandler OnStartMoving;
+    public event EventHandler OnStopMoving;
 
     [SerializeField]
     private int maxMoveRadius = 2 ;
@@ -30,7 +28,6 @@ public class MoveAction : BaseAction//, IAction
     // Start is called before the first frame update
     void Start()
     {
-        unitAnimator.SetBool("IsRunning", false);
     }
 
     // Update is called once per frame
@@ -48,11 +45,9 @@ public class MoveAction : BaseAction//, IAction
             float forwardRotateSpeed = 10;
             transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * forwardRotateSpeed);
         }
-        else if (unitAnimator.GetBool("IsRunning"))
-        {            
-            //set animation param for walking to false
-            unitAnimator.SetBool("IsRunning", false);
-            
+        else
+        {
+            OnStopMoving?.Invoke(this, EventArgs.Empty);
             ActionEnd();            
         }
     }
@@ -65,7 +60,8 @@ public class MoveAction : BaseAction//, IAction
     {
         ActionStart(completeActionDelegate);
 
-        unitAnimator.SetBool("IsRunning", true);
+        OnStartMoving?.Invoke(this, EventArgs.Empty);
+
         this.targetPosition = LevelGrid.Instance.GetWorldFromGridPosition( targetPosition);
     }
 

@@ -28,6 +28,8 @@ public class ShootAction : BaseAction
     [SerializeField]
     private int maxShootRadius = 7;
 
+    public event EventHandler OnStartShooting;
+
     public override string GetActionName()
     {
         return "Shoot";
@@ -93,7 +95,7 @@ public class ShootAction : BaseAction
         Debug.Log("Aiming");
 
         ActionStart(OnCompleteAction);
-
+        OnStartShooting?.Invoke(this,EventArgs.Empty);
     }
 
     // Start is called before the first frame update
