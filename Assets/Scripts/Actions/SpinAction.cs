@@ -38,10 +38,9 @@ public class SpinAction : BaseAction // MonoBehaviour//, IAction
 
         if (totalSpinAmount>=360f) 
         { 
-            isActive= false;
-            totalSpinAmount = 0f;
-            //completeAction();
-            onActionComplete();
+            ActionEnd();
+
+            totalSpinAmount = 0f;            
         }
 
     }
@@ -64,8 +63,7 @@ public class SpinAction : BaseAction // MonoBehaviour//, IAction
 
     public override void TakeAction(Action completeActionDelegate, GridPosition gridPosition)
     {
-        isActive = true;
-        onActionComplete = completeActionDelegate;
+        ActionStart(completeActionDelegate);
     }
 
     public override int GetActionCost()

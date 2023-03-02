@@ -127,4 +127,14 @@ public class Unit : MonoBehaviour
     {
         return isEnemy;
     }
+
+    public Vector3 GetWorldPosition()
+    {
+        return transform.position;
+    }
+
+    internal void TakeDamage()
+    {
+        Debug.Log(this + " has been shot!");
+    }
 }

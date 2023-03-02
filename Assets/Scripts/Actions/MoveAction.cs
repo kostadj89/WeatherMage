@@ -52,9 +52,8 @@ public class MoveAction : BaseAction//, IAction
         {            
             //set animation param for walking to false
             unitAnimator.SetBool("IsRunning", false);
-            isActive = false;
-            //completeAction();
-            onActionComplete();
+            
+            ActionEnd();            
         }
     }
     public override string GetActionName()
@@ -64,9 +63,8 @@ public class MoveAction : BaseAction//, IAction
 
     public override void TakeAction(Action completeActionDelegate, GridPosition targetPosition)
     {
-        onActionComplete = completeActionDelegate;
-        //set animation param for walking to true 
-        isActive = true;
+        ActionStart(completeActionDelegate);
+
         unitAnimator.SetBool("IsRunning", true);
         this.targetPosition = LevelGrid.Instance.GetWorldFromGridPosition( targetPosition);
     }

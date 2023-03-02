@@ -31,6 +31,18 @@ public abstract class BaseAction : MonoBehaviour
         return 1;
     }
 
+    protected void ActionStart(Action onCompleteAction)
+    {
+        this.onActionComplete = onCompleteAction;
+        isActive = true;        
+    }
+
+    protected void ActionEnd()
+    {
+        isActive = false;
+        this.onActionComplete();
+    }
+
     public abstract List<GridPosition> GetAllValidGridPositionsForAction();
 
     // Start is called before the first frame update
