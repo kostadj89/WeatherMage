@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class ShootAction : BaseAction
 {
-    private const float BEGIN_TIME = 1f;
+    private const float BEGIN_TIME = 1.1f;
     private const float SHOOTING_TIME = 0.1f;
     private const float COOLOFF_TIME = 0.5f;
    
@@ -28,7 +28,20 @@ public class ShootAction : BaseAction
     [SerializeField]
     private int maxShootRadius = 7;
 
+    //custom event args class defined below with attacker and target unit infos
     public event EventHandler OnStartShooting;
+    public event EventHandler<OnShootEventArgs> OnFire;
+    public class OnShootEventArgs : EventArgs
+    {
+        public Unit shootingUnit;
+        public Unit targetUnit;
+
+        public OnShootEventArgs(Unit shootingUnit, Unit targetUnit)
+        {
+            this.shootingUnit = shootingUnit;
+            this.targetUnit = targetUnit;
+        }
+    }
 
     public override string GetActionName()
     {
@@ -171,6 +184,7 @@ public class ShootAction : BaseAction
 
     private void TakeAShot()
     {
+        OnFire?.Invoke(this, new OnShootEventArgs(unit, targetUnit));
         targetUnit.TakeDamage();
     }
 }

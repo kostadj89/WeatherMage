@@ -176,7 +176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7a6c3c09a0e76840b59cbb6bd52ab2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitAnimator: {fileID: 2058820104809143918}
   maxMoveRadius: 1
 --- !u!114 &7341397143519750993
 MonoBehaviour:
@@ -216,6 +215,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitAnimator: {fileID: 2058820104809143918}
+  spellboltProjectilePrefab: {fileID: 1279203868380885394, guid: 038ba7db17138ac4a8deccd0af19d878,
+    type: 3}
+  projectileSpawnPoint: {fileID: 2143951792428461123}
 --- !u!1001 &2143951792428651891
 PrefabInstance:
   m_ObjectHideFlags: 0
