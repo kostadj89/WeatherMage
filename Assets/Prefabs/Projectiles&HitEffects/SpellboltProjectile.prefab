@@ -45,10 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa75f45aaca784640a193bc2c0ef197e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileMovSpeed: 10
+  projectileMovSpeed: 30
   trailRenderer: {fileID: 7820510222731338556}
   projectileHitVFXPrefab: {fileID: 2212171071499050998, guid: cbe9bac9fd6e082438cad4cfdebe9ee2,
     type: 3}
+  projecileTailZigZag: 1
+  projectileHightOffset: 2
+  projectileTailDeformationPower: 10
 --- !u!1 &3757004124240523465
 GameObject:
   m_ObjectHideFlags: 0

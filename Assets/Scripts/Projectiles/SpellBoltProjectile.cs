@@ -15,6 +15,13 @@ public class SpellBoltProjectile : MonoBehaviour
     private TrailRenderer trailRenderer;
     [SerializeField]
     private Transform projectileHitVFXPrefab;
+    [SerializeField]
+    private bool projecileTailZigZag = true;
+    [SerializeField]
+    private float projectileHightOffset;
+    [SerializeField]
+    private float projectileTailDeformationPower;
+
     public void Setup(Vector3 targetPosition)
     {
         this.targetPosition = targetPosition;
@@ -33,7 +40,10 @@ public class SpellBoltProjectile : MonoBehaviour
 
         float distanceBeforeMoving = Vector3.Distance(transform.position, targetPosition);
 
-        transform.position += projectileMoveDirection * projectileMovSpeed * Time.deltaTime;
+        //added so we coud get zig-zag movement
+        Vector3 heightOffsetVector = projecileTailZigZag ? new Vector3(0, Random.Range(-projectileHightOffset, projectileHightOffset) + Mathf.Sin(distanceBeforeMoving * projectileTailDeformationPower), 0) : new Vector3(0,0,0);
+
+        transform.position += (projectileMoveDirection + heightOffsetVector) * projectileMovSpeed * Time.deltaTime ;
 
         float distanceAfterMoving = Vector3.Distance(transform.position, targetPosition);
 
