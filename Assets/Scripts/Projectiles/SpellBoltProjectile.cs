@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class SpellBoltProjectile : MonoBehaviour
     private const float TRESHOLD = 0.1f;
     private Vector3 targetPosition;
     private float tresholdDistance = TRESHOLD;
+    private int damage;
 
     [SerializeField]
     private float projectileMovSpeed=200f;
@@ -22,9 +24,21 @@ public class SpellBoltProjectile : MonoBehaviour
     [SerializeField]
     private float projectileTailDeformationPower;
 
+    public event EventHandler<OnProjectileDestroyedArgs> OnProjectileDestroyed;
+    public class OnProjectileDestroyedArgs : EventArgs
+    {
+        public int damage;
+        public Vector3 targetPosition;
+    }
+
     public void Setup(Vector3 targetPosition)
     {
         this.targetPosition = targetPosition;
+    }
+
+    internal void SetDamage(int damage)
+    {
+        this.damage= damage;
     }
 
     // Start is called before the first frame update
@@ -41,7 +55,7 @@ public class SpellBoltProjectile : MonoBehaviour
         float distanceBeforeMoving = Vector3.Distance(transform.position, targetPosition);
 
         //added so we coud get zig-zag movement
-        Vector3 heightOffsetVector = projecileTailZigZag ? new Vector3(0, Random.Range(-projectileHightOffset, projectileHightOffset) + Mathf.Sin(distanceBeforeMoving * projectileTailDeformationPower), 0) : new Vector3(0,0,0);
+        Vector3 heightOffsetVector = projecileTailZigZag ? new Vector3(0, UnityEngine.Random.Range(-projectileHightOffset, projectileHightOffset) + Mathf.Sin(distanceBeforeMoving * projectileTailDeformationPower), 0) : new Vector3(0,0,0);
 
         transform.position += (projectileMoveDirection + heightOffsetVector) * projectileMovSpeed * Time.deltaTime ;
 
@@ -53,6 +67,9 @@ public class SpellBoltProjectile : MonoBehaviour
             Instantiate(projectileHitVFXPrefab, targetPosition, Quaternion.identity);
             //unparent trail
             trailRenderer.transform.parent = null;
+
+            OnProjectileDestroyed.Invoke(this, new OnProjectileDestroyedArgs { targetPosition = targetPosition, damage = damage });
+
             Destroy(gameObject); 
         }
     }

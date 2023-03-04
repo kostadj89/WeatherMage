@@ -27,6 +27,8 @@ public class ShootAction : BaseAction
 
     [SerializeField]
     private int maxShootRadius = 7;
+    [SerializeField]
+    private int damage = 35;
 
     //custom event args class defined below with attacker and target unit infos
     public event EventHandler OnStartShooting;
@@ -35,11 +37,13 @@ public class ShootAction : BaseAction
     {
         public Unit shootingUnit;
         public Unit targetUnit;
+        public int damage;
 
-        public OnShootEventArgs(Unit shootingUnit, Unit targetUnit)
+        public OnShootEventArgs(Unit shootingUnit, Unit targetUnit, int damage)
         {
             this.shootingUnit = shootingUnit;
             this.targetUnit = targetUnit;
+            this.damage = damage;
         }
     }
 
@@ -184,7 +188,6 @@ public class ShootAction : BaseAction
 
     private void TakeAShot()
     {
-        OnFire?.Invoke(this, new OnShootEventArgs(unit, targetUnit));
-        targetUnit.TakeDamage();
+        OnFire?.Invoke(this, new OnShootEventArgs(unit, targetUnit, damage));
     }
 }

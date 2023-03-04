@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour
     private SpinAction spinAction;
     private BaseAction[] unitActions;
     private int currentActionPoints;
+    private HealthSystem healthSystem;
     
     [SerializeField]
     private int maxActionPoints = 3;
@@ -26,6 +27,7 @@ public class Unit : MonoBehaviour
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
         unitActions = GetComponents<BaseAction>();
+        healthSystem = GetComponent<HealthSystem>();
         
     }
 
@@ -55,27 +57,18 @@ public class Unit : MonoBehaviour
 
         //add end turn listener
         TurnSystem.Instance.OnTurnEnded += UpdateUnitOnTurnEnded;
+        healthSystem.OnDying += Die;
+    }
+
+    private void Die(object sender, EventArgs e)
+    {
+        LevelGrid.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
     void Update()
-    {
-        //if (Vector3.Distance(transform.position, targetPosition) > stopDistanceTreshold)
-        //{
-        //    Vector3 moveDirection = (targetPosition - transform.position).normalized;
-        //    float moveSpeed = 4f;            
-            
-        //    transform.position += moveDirection * Time.deltaTime * moveSpeed;
-
-        //    float forwardRotateSpeed = 10;
-        //    transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime*forwardRotateSpeed);
-        //}
-        //else if (unitAnimator.GetBool("IsRunning"))
-        //{
-        //    //set animation param for walking to false
-        //    unitAnimator.SetBool("IsRunning", false);
-        //}
-        
+    {        
         //checking grid position
         GridPosition newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         
@@ -133,8 +126,14 @@ public class Unit : MonoBehaviour
         return transform.position;
     }
 
-    internal void TakeDamage()
+    internal void TakeDamage(int damage)
     {
         Debug.Log(this + " has been shot!");
+        healthSystem.TakeDamage(damage);
+    }
+
+    private void OnDestroy()
+    {
+        TurnSystem.Instance.OnTurnEnded -= UpdateUnitOnTurnEnded;
     }
 }
