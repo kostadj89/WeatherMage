@@ -113,6 +113,23 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3863818508511025050, guid: 07c615ce4e0da4148905f4b5893f270b,
+        type: 3}
+      propertyPath: ARootBone
+      value: 
+      objectReference: {fileID: 8530086263161449682}
+    - target: {fileID: 3863818508511025050, guid: 07c615ce4e0da4148905f4b5893f270b,
+        type: 3}
+      propertyPath: ragdollUnit
+      value: 
+      objectReference: {fileID: 8284806150034037637, guid: e52b9259c839370418dfcbdc25502dfb,
+        type: 3}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 07c615ce4e0da4148905f4b5893f270b, type: 3}
+--- !u!4 &8530086263161449682 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2148431314543011674, guid: 07c615ce4e0da4148905f4b5893f270b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7759762248251476872}
+  m_PrefabAsset: {fileID: 0}
