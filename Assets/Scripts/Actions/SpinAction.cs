@@ -37,10 +37,9 @@ public class SpinAction : BaseAction // MonoBehaviour//, IAction
         totalSpinAmount += spinAmount;
 
         if (totalSpinAmount>=360f) 
-        { 
-            ActionEnd();
-
-            totalSpinAmount = 0f;            
+        {
+            totalSpinAmount = 0f;
+            ActionEnd();                     
         }
 
     }

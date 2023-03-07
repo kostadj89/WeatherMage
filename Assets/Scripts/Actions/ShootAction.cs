@@ -110,9 +110,9 @@ public class ShootAction : BaseAction
         canTakeAShot = true;
         //unit enters aiming state
         Debug.Log("Aiming");
-
-        ActionStart(OnCompleteAction);
+               
         OnStartShooting?.Invoke(this,EventArgs.Empty);
+        ActionStart(OnCompleteAction);
     }
 
     // Start is called before the first frame update
@@ -189,5 +189,19 @@ public class ShootAction : BaseAction
     private void TakeAShot()
     {
         OnFire?.Invoke(this, new OnShootEventArgs(unit, targetUnit, damage));
+    }
+
+    public Unit GetTargetUnit()
+    {
+        return targetUnit;
+    }
+
+    public Unit GetUnit()
+    {
+        return unit;
+    }
+    public int GetDamage()
+    {
+        return damage;
     }
 }

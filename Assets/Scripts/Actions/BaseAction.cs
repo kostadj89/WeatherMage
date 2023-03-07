@@ -5,6 +5,8 @@ using UnityEngine;
 
 public abstract class BaseAction : MonoBehaviour
 {
+    public static event EventHandler OnAnyActionStart;
+    public static event EventHandler OnAnyActionEnd;
     protected Unit unit;
     protected bool isActive;
 
@@ -34,13 +36,16 @@ public abstract class BaseAction : MonoBehaviour
     protected void ActionStart(Action onCompleteAction)
     {
         this.onActionComplete = onCompleteAction;
-        isActive = true;        
+        isActive = true;
+
+        OnAnyActionStart?.Invoke(this, EventArgs.Empty);
     }
 
     protected void ActionEnd()
     {
         isActive = false;
         this.onActionComplete();
+        OnAnyActionEnd?.Invoke(this, EventArgs.Empty);
     }
 
     public abstract List<GridPosition> GetAllValidGridPositionsForAction();
