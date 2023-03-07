@@ -6,6 +6,8 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     public static event EventHandler OnAnyActionPointsChanged;
+    public static event EventHandler OnAnyUnitSpawned;
+    public static event EventHandler OnAnyUnitDead;
 
     //private Vector3 targetPosition;
     private GridPosition currentGridPosition;
@@ -58,12 +60,16 @@ public class Unit : MonoBehaviour
         //add end turn listener
         TurnSystem.Instance.OnTurnEnded += UpdateUnitOnTurnEnded;
         healthSystem.OnDying += Die;
+
+        OnAnyUnitSpawned?.Invoke(this,EventArgs.Empty);
     }
 
     private void Die(object sender, EventArgs e)
     {
         LevelGrid.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
         Destroy(gameObject);
+
+        OnAnyUnitDead?.Invoke(this,EventArgs.Empty);
     }
 
     // Update is called once per frame
