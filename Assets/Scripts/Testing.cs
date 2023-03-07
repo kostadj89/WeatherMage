@@ -21,7 +21,7 @@ public class Testing : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.N) && Unit != null) 
         {
             //Unit.GetComponent<SpinAction>().ToggleSpin();
-            //GridSystemVisual.ShowReachableGridPositions(Unit.GetMoveAction().GetValidGridPositionsForAction());
+            //GridSystemVisual.ShowGridPositions(Unit.GetMoveAction().GetValidGridPositionsForAction());
         }
 
         //Debug.Log(gridSystem.GetGridPosFromVector(MouseWorld.GetPosition()));

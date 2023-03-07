@@ -204,4 +204,9 @@ public class ShootAction : BaseAction
     {
         return damage;
     }
+
+    public int GetRadius()
+    {
+        return maxShootRadius;
+    }
 }

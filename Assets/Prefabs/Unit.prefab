@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 2143951792390528786}
-  meshRenderer: {fileID: 0}
+  meshRenderer: {fileID: 6080465865061165605}
 --- !u!1 &1112947185669687767
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7a6c3c09a0e76840b59cbb6bd52ab2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMoveRadius: 1
+  maxMoveRadius: 2
 --- !u!114 &7341397143519750993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d775787353e2eec44a7e1123062e7076, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxShootRadius: 0
+  maxShootRadius: 7
   damage: 35
 --- !u!114 &-1980350712886523692
 MonoBehaviour:

@@ -11,12 +11,12 @@ PrefabInstance:
     - target: {fileID: -9037324105416926483, guid: 07c615ce4e0da4148905f4b5893f270b,
         type: 3}
       propertyPath: health
-      value: 1000
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: -9037324105416926483, guid: 07c615ce4e0da4148905f4b5893f270b,
         type: 3}
       propertyPath: healthMax
-      value: 1000
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 2143951792390528786, guid: 07c615ce4e0da4148905f4b5893f270b,
         type: 3}
@@ -139,6 +139,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8284806150034037637, guid: e52b9259c839370418dfcbdc25502dfb,
         type: 3}
+    - target: {fileID: 4857333480435375828, guid: 07c615ce4e0da4148905f4b5893f270b,
+        type: 3}
+      propertyPath: maxShootRadius
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 07c615ce4e0da4148905f4b5893f270b, type: 3}

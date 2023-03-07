@@ -15,7 +15,7 @@ public class UnitSelectedVisual : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
+        UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;        
         UpdateVisual();
     }
 
@@ -36,5 +36,10 @@ public class UnitSelectedVisual : MonoBehaviour
             meshRenderer.enabled = true;
         }
         else meshRenderer.enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        UnitActionSystem.Instance.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;
     }
 }
