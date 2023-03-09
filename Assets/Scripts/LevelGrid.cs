@@ -11,7 +11,7 @@ public class LevelGrid : MonoBehaviour
     public event EventHandler OnAnyUnitMoved;
 
     [SerializeField] private Transform gridDebugObjectPrefab;
-    private GridSystem gridSystem;
+    private GridSystem<GridObject> gridSystem;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class LevelGrid : MonoBehaviour
 
         Instance = this;
 
-        gridSystem = new GridSystem(10, 10, 2);
+        gridSystem = new GridSystem<GridObject>(10, 10, 2,(GridSystem<GridObject> gs,GridPosition gp) => new GridObject(gs, gp)); 
         gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
     }
     // Start is called before the first frame update

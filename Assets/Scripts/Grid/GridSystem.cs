@@ -57,26 +57,28 @@ public struct GridPosition : IEquatable<GridPosition>
         return new GridPosition(v.x - u.x, v.y - u.y);
     }
 }
-public class GridSystem
-{
+public class GridSystem<TGridObject>
+{ 
     private int width, height;
     private float cellSize;
     private float cellOffset = 0.2f;
-    private GridObject[,] gridObjectArray;
-    public GridSystem(int w,int h, float cellSize)
+    private TGridObject[,] gridObjectArray;
+
+    //Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject delegate which accepts arguments of type GridSystem<TGridObject>, GridPosition and returns type TGridObject
+    public GridSystem(int w,int h, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     { 
         this.width = w;
         this.height = h;
         this.cellSize = cellSize;
 
-        gridObjectArray = new GridObject[w,h];
+        gridObjectArray = new TGridObject[w,h];
         for (int i = 0 ; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
                 //Debug.DrawLine(GetWorldPositionFromCoordinates(i, j), GetWorldPositionFromCoordinates(i, j) + Vector3.right * cellOffset, Color.white, 9999);
                 GridPosition gridCell = new GridPosition(i,j);
-                gridObjectArray[i,j] = new GridObject(this, gridCell);
+                gridObjectArray[i,j] = createGridObject(this, gridCell);
             }
         }
     }
@@ -109,12 +111,12 @@ public class GridSystem
                 debugObjectTransform = GameObject.Instantiate(debugPrefab, GetWorldFromGridPosition(gridPosition), Quaternion.identity);
                 //debugPrefab.GetComponentInChildren<TextMeshPro>().text = $"{i}, {j}";
                 GridDebugObject gridDebugObject = debugObjectTransform.GetComponent<GridDebugObject>();
-                gridDebugObject.SetGridObject(GetGridObjectFromGridPos(gridPosition));
+                gridDebugObject.SetGridObject(GetGridObjectFromGridPos(gridPosition) as GridObject);
             }
         }
     }
-
-    public GridObject GetGridObjectFromGridPos(GridPosition gridPosition)
+    
+    public TGridObject GetGridObjectFromGridPos(GridPosition gridPosition)
     {
         return gridObjectArray[gridPosition.x, gridPosition.y];
     }
@@ -126,7 +128,7 @@ public class GridSystem
 
     public bool IsGridPositionOccupied(GridPosition gridPosition)
     {
-        return gridObjectArray[gridPosition.x,gridPosition.y].IsOccupied();
+        return (gridObjectArray[gridPosition.x,gridPosition.y] as GridObject).IsOccupied();
     }
 
     public int GetWidth()

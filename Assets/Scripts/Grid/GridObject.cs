@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class GridObject
 {
-    private GridSystem gridSystem;
+    private GridSystem<GridObject> gridSystem;
     private GridPosition gridCellPosition;
     private List<Unit> unitsAtGridObject;
        
 
-    public GridObject(GridSystem gridSystem, GridPosition gridCell)
+    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell)
     {
         this.gridSystem = gridSystem;
         this.gridCellPosition = gridCell;
         this.unitsAtGridObject = new List<Unit>();
     }
 
-    public GridObject(GridSystem gridSystem, GridPosition gridCell, List<Unit> unitsAtGridObject) : this(gridSystem, gridCell)
+    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell, List<Unit> unitsAtGridObject) : this(gridSystem, gridCell)
     {
         this.unitsAtGridObject = unitsAtGridObject;
     }
@@ -55,7 +55,7 @@ public class GridObject
         return gridCellPosition.ToString()+ unitString;
     }
 
-    internal bool IsOccupied()
+    public bool IsOccupied()
     {
         return unitsAtGridObject.Count > 0;
     }
