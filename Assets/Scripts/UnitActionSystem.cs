@@ -116,7 +116,7 @@ public class UnitActionSystem : MonoBehaviour
     {
         selectedUnit = unit;
         //sets default move action
-        SetSelectedAction(unit.GetMoveAction());
+        SetSelectedAction(unit.GetAction<MoveAction>());
         //triggeres selcetion change events
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }

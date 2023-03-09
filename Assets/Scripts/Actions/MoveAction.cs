@@ -117,7 +117,7 @@ public class MoveAction : BaseAction//, IAction
     
     public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
     {
-        int targetCountFromGridPosition = unit.GetShootAction().GetNumberOfTargetsFromPosition(gridPos);
+        int targetCountFromGridPosition = unit.GetAction<ShootAction>().GetNumberOfTargetsFromPosition(gridPos);
         return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 10 + targetCountFromGridPosition * 15 };
     } 
 

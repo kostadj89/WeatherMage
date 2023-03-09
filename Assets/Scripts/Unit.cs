@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -12,28 +13,23 @@ public class Unit : MonoBehaviour
     //private Vector3 targetPosition;
     private GridPosition currentGridPosition;
 
-    //Actions
-    private MoveAction moveAction;
-    private SpinAction spinAction;
-    private ShootAction shootAction;
+    //Actions   
     private BaseAction[] unitActions;
     private int currentActionPoints;
-    private HealthSystem healthSystem;
-    
     [SerializeField]
     private int maxActionPoints = 3;
+
+    //Health
+    private HealthSystem healthSystem;   
+   
+    //Alligence 
     [SerializeField]
     private bool isEnemy;   
 
     private void Awake()
-    {
-        //targetPosition=transform.position;
-        moveAction = GetComponent<MoveAction>();
-        spinAction = GetComponent<SpinAction>();
-        shootAction= GetComponent<ShootAction>();
+    {       
         unitActions = GetComponents<BaseAction>();
-        healthSystem = GetComponent<HealthSystem>();
-        
+        healthSystem = GetComponent<HealthSystem>();        
     }
 
     private void UpdateUnitOnTurnEnded(object sender, int e)
@@ -90,9 +86,18 @@ public class Unit : MonoBehaviour
     } 
     
     //publics 
-    public MoveAction GetMoveAction() { return moveAction; }
-    public ShootAction GetShootAction() { return shootAction; }
-    public SpinAction GetSpinAction() { return spinAction; }
+    public T GetAction<T>() where T:BaseAction
+    {
+        foreach (BaseAction item in unitActions)
+        {
+            if (item is T)
+            {
+                return (T)item;
+            }
+        }
+
+        return null;
+    }
 
     public GridPosition GetGridPosition() { return currentGridPosition; }
 
