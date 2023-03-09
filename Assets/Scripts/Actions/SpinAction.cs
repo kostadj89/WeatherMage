@@ -82,4 +82,14 @@ public class SpinAction : BaseAction // MonoBehaviour//, IAction
     {
         return isActive;
     }
+
+    #region AI
+
+    public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
+    {
+        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 0};
+    }
+
+    #endregion
+
 }

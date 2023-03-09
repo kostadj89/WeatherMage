@@ -54,9 +54,13 @@ public class ShootAction : BaseAction
 
     public override List<GridPosition> GetAllValidGridPositionsForAction()
     {
+        return GetAllValidGridPositionsForAction(unit.GetGridPosition());
+    }
+    private  List<GridPosition> GetAllValidGridPositionsForAction(GridPosition originGridPosition)
+    {
         List<GridPosition> validGridPositions = new List<GridPosition>();
 
-        GridPosition unitGridPosition = unit.GetGridPosition();
+        //GridPosition originGridPosition = unit.GetGridPosition();
         GridPosition offsetGridPosition;
 
         GridPosition testGridPos;
@@ -66,7 +70,7 @@ public class ShootAction : BaseAction
             for (int j = -maxShootRadius; j <= maxShootRadius; j++)
             {
                 offsetGridPosition = new GridPosition(i, j);
-                testGridPos = offsetGridPosition + unitGridPosition;
+                testGridPos = offsetGridPosition + originGridPosition;
 
                 // check to see if the cell is out of grid bounds, if yes ignore
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPos))
@@ -209,4 +213,20 @@ public class ShootAction : BaseAction
     {
         return maxShootRadius;
     }
+    public int GetNumberOfTargetsFromPosition(GridPosition gridPosition)
+    {
+        return GetAllValidGridPositionsForAction(gridPosition).Count;
+    }
+
+    #region AI
+
+    public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
+    {
+        Unit potentialEnemy = LevelGrid.Instance.GetUnitAtGridPosition(gridPos);
+        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 100 + Mathf.RoundToInt((1f- potentialEnemy.GetCurrentHealthPercentage())*10) };
+    }
+
+    
+
+    #endregion
 }

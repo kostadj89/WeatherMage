@@ -112,4 +112,14 @@ public class MoveAction : BaseAction//, IAction
     {
         return isActive;
     }
+
+    #region AI
+    
+    public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
+    {
+        int targetCountFromGridPosition = unit.GetShootAction().GetNumberOfTargetsFromPosition(gridPos);
+        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 10 + targetCountFromGridPosition * 15 };
+    } 
+
+    #endregion
 }

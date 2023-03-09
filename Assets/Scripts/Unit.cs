@@ -11,9 +11,11 @@ public class Unit : MonoBehaviour
 
     //private Vector3 targetPosition;
     private GridPosition currentGridPosition;
+
     //Actions
     private MoveAction moveAction;
     private SpinAction spinAction;
+    private ShootAction shootAction;
     private BaseAction[] unitActions;
     private int currentActionPoints;
     private HealthSystem healthSystem;
@@ -28,6 +30,7 @@ public class Unit : MonoBehaviour
         //targetPosition=transform.position;
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
+        shootAction= GetComponent<ShootAction>();
         unitActions = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
         
@@ -88,6 +91,7 @@ public class Unit : MonoBehaviour
     
     //publics 
     public MoveAction GetMoveAction() { return moveAction; }
+    public ShootAction GetShootAction() { return shootAction; }
     public SpinAction GetSpinAction() { return spinAction; }
 
     public GridPosition GetGridPosition() { return currentGridPosition; }
@@ -131,6 +135,11 @@ public class Unit : MonoBehaviour
     public Vector3 GetWorldPosition()
     {
         return transform.position;
+    }
+
+    public float GetCurrentHealthPercentage()
+    {
+        return healthSystem.GetNormalizedHealth();
     }
 
     internal void TakeDamage(int damage)

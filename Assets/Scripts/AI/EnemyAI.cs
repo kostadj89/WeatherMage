@@ -102,28 +102,47 @@ public class EnemyAI : MonoBehaviour
 
     private bool TryTakeUnitEnemyAIAction(Unit enemyUnit, Action onEnemyAIActionComplete)
     {
-       //temp spin action
-       SpinAction spinAction = enemyUnit.GetSpinAction();
-
-        //trying to run spin on enemy unit
-        GridPosition enemyGridPosition = enemyUnit.GetGridPosition();
-
-        if (spinAction.IsValidGridPositionForAction(enemyGridPosition))
+        BaseAction bestEnemyAction= null;
+        ScoredEnemyAIAction bestScoredEnemyAIAction = null;
+        BaseAction[] allEnemyActions = enemyUnit.GetAllUnitActions();
+        
+        //going through all available enemy actions
+        foreach (BaseAction enemyAction in allEnemyActions)
         {
-            if (enemyUnit.TrySpendPointsToTakeAction(spinAction))
+            //if the action is too expensive skip that action, enemy doesn't have that many action points
+            if (!enemyUnit.CanSpendActionPointsToTakeAction(enemyAction))
             {
-                Debug.Log("Enemy spins!");
-                spinAction.TakeAction(onEnemyAIActionComplete, enemyGridPosition);
-                return true;
+                continue;
+            }
+
+            //if it's first action set it as best
+            if (bestEnemyAction == null)
+            {
+                bestEnemyAction = enemyAction;
+                //of all posible actions of type enemyAction action type, do the one with best score
+                bestScoredEnemyAIAction = enemyAction.GetBestScoreAndPosForAction();
             }
             else
             {
-                return false;
+                ScoredEnemyAIAction tempScoredAction = enemyAction.GetBestScoreAndPosForAction();
+
+                if (tempScoredAction != null && tempScoredAction.actionValue > bestScoredEnemyAIAction.actionValue)
+                { 
+                    bestScoredEnemyAIAction = tempScoredAction;
+                    bestEnemyAction = enemyAction;
+                }
             }
+        }
+
+        //TrySpendPointsToTakeAction this actually spends points for action
+        if (bestEnemyAction != null && enemyUnit.TrySpendPointsToTakeAction(bestEnemyAction))
+        {
+            bestEnemyAction.TakeAction(onEnemyAIActionComplete,bestScoredEnemyAIAction.gridPosition);
+            return true;
         }
         else
         {
             return false;
-        }
+        }        
     }
 }
