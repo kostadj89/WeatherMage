@@ -29,6 +29,8 @@ public class ShootAction : BaseAction
     private int maxShootRadius = 7;
     [SerializeField]
     private int damage = 35;
+    [SerializeField]
+    private LayerMask obstacleLayerMask;
 
     //custom event args class defined below with attacker and target unit infos
     public event EventHandler OnStartShooting;
@@ -93,6 +95,16 @@ public class ShootAction : BaseAction
 
                 //check to see if both units are on the same team
                 if (targetUnit.IsEnemy() == unit.IsEnemy())
+                {
+                    continue;
+                }
+
+                //if there are obcastles ignore
+                if(Physics.Raycast(
+                    LevelGrid.Instance.GetWorldFromGridPosition(originGridPosition) + Vector3.up * 1.7f,
+                    (targetUnit.GetWorldPosition()-unit.GetWorldPosition()).normalized,
+                    Vector3.Distance(targetUnit.GetWorldPosition(),unit.GetWorldPosition()),
+                    obstacleLayerMask))
                 {
                     continue;
                 }

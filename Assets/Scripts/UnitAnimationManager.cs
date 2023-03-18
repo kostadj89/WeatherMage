@@ -20,11 +20,25 @@ public class UnitAnimationManager : MonoBehaviour
 
     private void Awake()
     {
+        //if(TryGetComponent<Animator>(out Animator animatorOnInstance))
+        //{
+        //    unitAnimator = animatorOnInstance;
+        //}
+        //else
+        //{
+        //    Debug.Log("Unit doesn't have animator assigned");
+        //}
+
         //try to get all possible actions which have some kind of animation to them, and subscribe to their events
         if (TryGetComponent<MoveAction>(out MoveAction moveAction))
         {
             moveAction.OnStartMoving += OnStartMoving_AnimationManager;
-            unitAnimator.SetBool("IsRunning", false);
+            
+            if (unitAnimator != null)
+            {
+                unitAnimator.SetBool("IsRunning", false);
+            }
+            
             moveAction.OnStopMoving += OnStopMoving_AnimationManager;
         }
 
@@ -58,17 +72,28 @@ public class UnitAnimationManager : MonoBehaviour
 
     private void OnStartShooting_AnimationManager(object sender, EventArgs e)
     {
-        unitAnimator.SetTrigger("TakeAShot");        
+        if (unitAnimator != null)
+        {
+            unitAnimator.SetTrigger("TakeAShot");
+        }              
     }
 
     private void OnStopMoving_AnimationManager(object sender, EventArgs e)
     {
-        unitAnimator.SetBool("IsRunning", false);
+        if (unitAnimator != null)
+        {
+            unitAnimator.SetBool("IsRunning", false);
+        }
+       
     }
 
     private void OnStartMoving_AnimationManager(object sender, EventArgs e)
     {
-        unitAnimator.SetBool("IsRunning", true);
+        if (unitAnimator!= null)
+        {
+            unitAnimator.SetBool("IsRunning", true);
+        }
+       
     }
 
     // Start is called before the first frame update

@@ -6,26 +6,26 @@ using UnityEngine;
 
 public class GridDebugObject : MonoBehaviour
 {
-    private GridObject gridObject;
+    private object gridObject;
 
     [SerializeField] private TextMeshPro textMeshPro;
     [SerializeField] private float fontSize;
 
     private void Awake()
     {
-        if (textMeshPro!=null)
+        if (textMeshPro != null)
         {
             textMeshPro.fontSize = fontSize;
         }
     }
 
-    public void SetGridObject(GridObject gridObject)
+    public virtual void SetGridObject(object gridObject)
     { 
         this.gridObject = gridObject;
         textMeshPro.text = this.gridObject.ToString();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         textMeshPro.text = this.gridObject.ToString();
     }

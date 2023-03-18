@@ -336,6 +336,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxShootRadius: 7
   damage: 35
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &-1980350712886523692
 MonoBehaviour:
   m_ObjectHideFlags: 0

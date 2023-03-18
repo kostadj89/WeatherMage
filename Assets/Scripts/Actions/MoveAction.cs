@@ -2,6 +2,7 @@ using Assets.Scripts.Actions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ public class MoveAction : BaseAction//, IAction
     //protected CompleteActionDelegate completeAction;
 
     private const float stopDistanceTreshold = 0.1f;
-    private Vector3 targetPosition;
+    private List<Vector3> targetPositionPath;
+    private int currentPositionIndex = 0;
 
     public event EventHandler OnStartMoving;
     public event EventHandler OnStopMoving;
@@ -22,7 +24,8 @@ public class MoveAction : BaseAction//, IAction
     protected override void Awake()
     {
         base.Awake();
-        targetPosition = transform.position;
+        //targetPosition = transform.position;
+
     }
     
     // Start is called before the first frame update
@@ -34,6 +37,8 @@ public class MoveAction : BaseAction//, IAction
     void Update()
     {
         if (!isActive) { return; }
+
+        Vector3 targetPosition = targetPositionPath[currentPositionIndex];
 
         if (Vector3.Distance(transform.position, targetPosition) > stopDistanceTreshold)
         {
@@ -47,8 +52,16 @@ public class MoveAction : BaseAction//, IAction
         }
         else
         {
-            OnStopMoving?.Invoke(this, EventArgs.Empty);
-            ActionEnd();            
+            //go to the next grid cell in path
+            currentPositionIndex++;
+
+            //if it's the last one end action
+            if(currentPositionIndex >= targetPositionPath.Count) 
+            {
+                OnStopMoving?.Invoke(this, EventArgs.Empty);
+                ActionEnd();
+            }
+
         }
     }
     public override string GetActionName()
@@ -60,7 +73,11 @@ public class MoveAction : BaseAction//, IAction
     {
         OnStartMoving?.Invoke(this, EventArgs.Empty);
 
-        this.targetPosition = LevelGrid.Instance.GetWorldFromGridPosition( targetPosition);
+        this.targetPositionPath = (Pathfinding.Instance.FindAPath(unit.GetGridPosition(), targetPosition, out int pathDistance)
+            .Select(x=> LevelGrid.Instance.GetWorldFromGridPosition(x))).ToList();
+
+        this.currentPositionIndex= 0;
+        //this.targetPositionPath =  new List<Vector3> { LevelGrid.Instance.GetWorldFromGridPosition(targetPosition) };
         ActionStart(completeActionDelegate);
     }
 
@@ -78,9 +95,15 @@ public class MoveAction : BaseAction//, IAction
             for (int j = -maxMoveRadius; j <= maxMoveRadius; j++)
             {
                 offset = new GridPosition(i, j);
-                testGridPos = offset + unitGridPosition;                
+                testGridPos = offset + unitGridPosition;
+                
 
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPos) || LevelGrid.Instance.IsGridPositionOccupied(testGridPos))
+                //first check if grid with that coordinaes exist, then if it's occupied, then if it's walkable, then if it's reachable
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPos) 
+                    || LevelGrid.Instance.IsGridPositionOccupied(testGridPos) 
+                    || !Pathfinding.Instance.IsGridPositionWalkable(testGridPos)
+                    || !Pathfinding.Instance.HasAPath(unitGridPosition,testGridPos)
+                    || Pathfinding.Instance.GetPathDistanceCost(unitGridPosition,testGridPos) > maxMoveRadius*10)
                 {
                     continue;
                 } 

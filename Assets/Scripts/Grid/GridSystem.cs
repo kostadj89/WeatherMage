@@ -77,8 +77,8 @@ public class GridSystem<TGridObject>
             for (int j = 0; j < height; j++)
             {
                 //Debug.DrawLine(GetWorldPositionFromCoordinates(i, j), GetWorldPositionFromCoordinates(i, j) + Vector3.right * cellOffset, Color.white, 9999);
-                GridPosition gridCell = new GridPosition(i,j);
-                gridObjectArray[i,j] = createGridObject(this, gridCell);
+                GridPosition gridPosition = new GridPosition(i,j);
+                gridObjectArray[i,j] = createGridObject(this, gridPosition);
             }
         }
     }
@@ -111,7 +111,7 @@ public class GridSystem<TGridObject>
                 debugObjectTransform = GameObject.Instantiate(debugPrefab, GetWorldFromGridPosition(gridPosition), Quaternion.identity);
                 //debugPrefab.GetComponentInChildren<TextMeshPro>().text = $"{i}, {j}";
                 GridDebugObject gridDebugObject = debugObjectTransform.GetComponent<GridDebugObject>();
-                gridDebugObject.SetGridObject(GetGridObjectFromGridPos(gridPosition) as GridObject);
+                gridDebugObject.SetGridObject(GetGridObjectFromGridPos(gridPosition));
             }
         }
     }
@@ -128,6 +128,7 @@ public class GridSystem<TGridObject>
 
     public bool IsGridPositionOccupied(GridPosition gridPosition)
     {
+        Debug.Log(gridObjectArray[gridPosition.x, gridPosition.y]);
         return (gridObjectArray[gridPosition.x,gridPosition.y] as GridObject).IsOccupied();
     }
 

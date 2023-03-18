@@ -66,9 +66,8 @@ public class Unit : MonoBehaviour
     private void Die(object sender, EventArgs e)
     {
         LevelGrid.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
-        Destroy(gameObject);
-
         OnAnyUnitDead?.Invoke(this,EventArgs.Empty);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame

@@ -9,7 +9,10 @@ public class GridObject
     private GridPosition gridCellPosition;
     private List<Unit> unitsAtGridObject;
        
-
+    public GridObject(GridPosition gridCell)
+    {
+        this.gridCellPosition = gridCell;
+    }
     public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell)
     {
         this.gridSystem = gridSystem;
@@ -19,7 +22,14 @@ public class GridObject
 
     public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell, List<Unit> unitsAtGridObject) : this(gridSystem, gridCell)
     {
-        this.unitsAtGridObject = unitsAtGridObject;
+        if (unitsAtGridObject == null)
+        {
+            this.unitsAtGridObject = new List<Unit>();
+        }
+        else 
+        { 
+            this.unitsAtGridObject = unitsAtGridObject; 
+        }        
     }
 
     public void AddUnit(Unit unit)
