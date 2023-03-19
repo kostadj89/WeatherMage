@@ -90,7 +90,9 @@ public class EnemyAI : MonoBehaviour
 
         foreach (Unit enemyUnit in UnitManager.Instance.GetEnemyUnits())
         {
-            if(TryTakeUnitEnemyAIAction(enemyUnit, OnEnemyAIActionComplete))
+            UnitActionSystem.Instance.SetSelectedEnemyUnit(enemyUnit);
+
+            if (TryTakeUnitEnemyAIAction(enemyUnit, OnEnemyAIActionComplete))
             {
                 return true;
             }

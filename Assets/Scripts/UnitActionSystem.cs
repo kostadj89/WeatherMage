@@ -121,6 +121,15 @@ public class UnitActionSystem : MonoBehaviour
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    public void SetSelectedEnemyUnit(Unit unit)
+    {
+        selectedUnit = unit;
+        //sets default move action
+        //SetSelectedAction(unit.GetAction<MoveAction>());
+        //triggeres selcetion change events
+        OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     public void SetSelectedAction(BaseAction baseAction)
     {
         selectedAction = baseAction;
