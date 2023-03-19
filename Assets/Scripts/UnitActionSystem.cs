@@ -50,6 +50,12 @@ public class UnitActionSystem : MonoBehaviour
 
         if (!TurnSystem.Instance.IsPlayerTurn()) { return; }
 
+        if (selectedUnit.IsEnemy()) 
+        {
+            //if the last selected unit is an enemy unit, but it's now a players turn
+            SetSelectedUnit(UnitManager.Instance.GetFriendlyUnits()[0]);
+        }
+
         if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
         if (Input.GetMouseButtonDown(0))
