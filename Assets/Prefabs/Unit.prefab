@@ -339,6 +339,9 @@ MonoBehaviour:
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  spellboltProjectilePrefab: {fileID: 1279203868380885394, guid: 038ba7db17138ac4a8deccd0af19d878,
+    type: 3}
+  projectileSpawnPoint: {fileID: 2143951792428461123}
 --- !u!114 &-1980350712886523692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,9 +355,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitAnimator: {fileID: 2058820104809143918}
-  spellboltProjectilePrefab: {fileID: 1279203868380885394, guid: 038ba7db17138ac4a8deccd0af19d878,
-    type: 3}
-  projectileSpawnPoint: {fileID: 2143951792428461123}
 --- !u!114 &-9037324105416926483
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,20 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ShootAction;
-using static SpellBoltProjectile;
+using static CustomProjectile;
 
 public class UnitAnimationManager : MonoBehaviour
 {
     [SerializeField]
-    private Animator unitAnimator;
-
-    [SerializeField]
-    private Transform spellboltProjectilePrefab;
-
-    [SerializeField]
-    private Transform projectileSpawnPoint;
-
-    private Transform spellboltTransform;
+    private Animator unitAnimator;    
 
     private void Awake()
     {
@@ -45,30 +37,25 @@ public class UnitAnimationManager : MonoBehaviour
         if (TryGetComponent<ShootAction>(out ShootAction shootAction))
         {
             shootAction.OnStartShooting += OnStartShooting_AnimationManager;
-            shootAction.OnFire += OnFire_AnimationManager;
+            //CustomProjectile.OnAnyProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
+            //shootAction.OnFireProjectile += OnFire_AnimationManager;
         }
     }
 
     private void OnFire_AnimationManager(object sender, ShootAction.OnShootEventArgs onShootEventArgs)
     {
-        spellboltTransform = Instantiate(spellboltProjectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+        //spellboltTransform = Instantiate(spellboltProjectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
 
-        Vector3 targetProjectilePos = onShootEventArgs.targetUnit.GetWorldPosition();
+        //Vector3 targetProjectilePos = onShootEventArgs.targetUnit.GetWorldPosition();
         
-        //set projectile height to be the same as the spawn height
-        targetProjectilePos.y += projectileSpawnPoint.position.y;
+        ////set projectile height to be the same as the spawn height
+        //targetProjectilePos.y += projectileSpawnPoint.position.y;
 
-        SpellBoltProjectile sp = spellboltTransform.GetComponent<SpellBoltProjectile>();
-        sp.Setup(targetProjectilePos);
-        sp.OnProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
-        sp.SetDamage(onShootEventArgs.damage);
-    }
-
-    private void OnProjectileDestroyed_UnitAnimator(object sender, OnProjectileDestroyedArgs e)
-    {
-      Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(e.targetPosition));
-        targetUnit.TakeDamage(e.damage);
-    }
+        //CustomProjectile sp = spellboltTransform.GetComponent<CustomProjectile>();
+        //sp.Setup(targetProjectilePos);
+        //sp.OnProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
+        //sp.SetDamage(onShootEventArgs.damage);
+    }    
 
     private void OnStartShooting_AnimationManager(object sender, EventArgs e)
     {

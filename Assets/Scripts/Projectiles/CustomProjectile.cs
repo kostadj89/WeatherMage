@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SpellBoltProjectile : MonoBehaviour
+public class CustomProjectile : MonoBehaviour
 {
     private const float TRESHOLD = 0.1f;
     private Vector3 targetPosition;
@@ -23,6 +23,8 @@ public class SpellBoltProjectile : MonoBehaviour
     private float projectileHightOffset;
     [SerializeField]
     private float projectileTailDeformationPower;
+
+    private bool projectileAboutToBeDestroyed;
 
     // added for any projectile destroyed event
     public static event EventHandler<OnProjectileDestroyedArgs> OnAnyProjectileDestroyed;
@@ -46,7 +48,7 @@ public class SpellBoltProjectile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        projectileAboutToBeDestroyed = false;
     }
 
     // Update is called once per frame
@@ -65,14 +67,21 @@ public class SpellBoltProjectile : MonoBehaviour
 
         if (distanceBeforeMoving < distanceAfterMoving)//(Vector3.Distance(transform.position,targetPosition)<= tresholdDistance)
         {
+            if (projectileAboutToBeDestroyed)
+            {
+                return;
+            }
+
+            projectileAboutToBeDestroyed = true;
+
             transform.position = targetPosition;
             Instantiate(projectileHitVFXPrefab, targetPosition, Quaternion.identity);
             //unparent trail
             trailRenderer.transform.parent = null;
 
             //aded for screen shake event but maybe just the static version should be kept
-            OnAnyProjectileDestroyed.Invoke(this, new OnProjectileDestroyedArgs { targetPosition = targetPosition, damage = damage });
             OnProjectileDestroyed.Invoke(this, new OnProjectileDestroyedArgs { targetPosition = targetPosition, damage = damage });
+            OnAnyProjectileDestroyed.Invoke(this, new OnProjectileDestroyedArgs { targetPosition = targetPosition, damage = damage });
 
             Destroy(gameObject); 
         }

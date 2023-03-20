@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static CustomProjectile;
 
-public class ShootAction : BaseAction
+public class AreaShootAction : BaseAction
 {
     private const float BEGIN_TIME = 1.1f;
     private const float SHOOTING_TIME = 0.1f;
@@ -31,19 +30,13 @@ public class ShootAction : BaseAction
     [SerializeField]
     private int damage = 35;
     [SerializeField]
+    private int explosionRadius = 1;
+    [SerializeField]
     private LayerMask obstacleLayerMask;
-
-    [SerializeField]
-    private Transform spellboltProjectilePrefab;
-
-    [SerializeField]
-    private Transform projectileSpawnPoint;
-
-    private Transform spellboltTransform;
 
     //custom event args class defined below with attacker and target unit infos
     public event EventHandler OnStartShooting;
-    public event EventHandler<OnShootEventArgs> OnFireProjectile;
+    public event EventHandler<OnShootEventArgs> OnProjectileFire;
     public class OnShootEventArgs : EventArgs
     {
         public Unit shootingUnit;
@@ -58,19 +51,9 @@ public class ShootAction : BaseAction
         }
     }
 
-    private void OnProjectileDestroyed_ShootAction(object sender, OnProjectileDestroyedArgs e)
-    {
-        Unit targetedUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(e.targetPosition));
-
-        if (targetedUnit == targetUnit)
-        {
-            targetedUnit.TakeDamage(e.damage);
-        }        
-    }
-
     public override string GetActionName()
     {
-        return "Shoot";
+        return "AreaShoot";
     }
 
     public override List<GridPosition> GetAllValidGridPositionsForAction()
@@ -153,7 +136,7 @@ public class ShootAction : BaseAction
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -223,20 +206,7 @@ public class ShootAction : BaseAction
 
     private void TakeAShot()
     {
-        //OnFireProjectile?.Invoke(this, new OnShootEventArgs(unit, targetUnit, damage));
-        
-        spellboltTransform = Instantiate(spellboltProjectilePrefab, projectileSpawnPoint.position, Quaternion.identity);        
-
-        Vector3 targetProjectilePos = targetUnit.GetWorldPosition();
-
-        //set projectile height to be the same as the spawn height
-        targetProjectilePos.y += projectileSpawnPoint.position.y;
-
-        CustomProjectile sp = spellboltTransform.GetComponent<CustomProjectile>();
-        sp.Setup(targetProjectilePos);
-        //listen for when it is destroyed
-        sp.OnProjectileDestroyed += OnProjectileDestroyed_ShootAction;
-        sp.SetDamage(damage);
+        OnProjectileFire?.Invoke(this, new OnShootEventArgs(unit, targetUnit, damage));
     }
 
     public Unit GetTargetUnit()

@@ -10,10 +10,10 @@ public class ScreenShakeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpellBoltProjectile.OnAnyProjectileDestroyed += OnAnyProjectileDestroyed_ScreenShakeManager;
+        CustomProjectile.OnAnyProjectileDestroyed += OnAnyProjectileDestroyed_ScreenShakeManager;
     }
 
-    private void OnAnyProjectileDestroyed_ScreenShakeManager(object sender, SpellBoltProjectile.OnProjectileDestroyedArgs e)
+    private void OnAnyProjectileDestroyed_ScreenShakeManager(object sender, CustomProjectile.OnProjectileDestroyedArgs e)
     {
         screenShaker.Shake(0.9f);
     }

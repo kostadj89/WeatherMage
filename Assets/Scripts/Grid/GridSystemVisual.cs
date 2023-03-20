@@ -20,6 +20,8 @@ public class GridSystemVisual : MonoBehaviour
         Purple
     }
 
+    private bool hideVisuals = false;
+
     [SerializeField] private Transform gridSystemVisualSinglePrefab;
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterials;
 
@@ -43,17 +45,38 @@ public class GridSystemVisual : MonoBehaviour
 
         //subscribe to events
         UnitActionSystem.Instance.OnSelectedActionChanged += OnSelectedActionChanged_GridSystemVisual;
+
+        UnitActionSystem.Instance.OnBusyChanged += OnBusyChanged_GridSystemVisual;
         LevelGrid.Instance.OnAnyUnitMoved += OnAnyUnitMoved_GridSystemVisual;
+    }
+
+    private void OnBusyChanged_GridSystemVisual(object sender, bool e)
+    {
+        hideVisuals = e;
     }
 
     private void OnAnyUnitMoved_GridSystemVisual(object sender, EventArgs e)
     {
-        UpdateGridVisuals();
+        if (hideVisuals)
+        {
+            HideAllGridPositions();
+        }
+        else
+        {
+            UpdateGridVisuals();
+        }        
     }
 
     private void OnSelectedActionChanged_GridSystemVisual(object sender, EventArgs e)
     {
-        UpdateGridVisuals();
+        if (hideVisuals)
+        {
+            HideAllGridPositions();
+        }
+        else
+        {
+            UpdateGridVisuals();
+        }
     }
 
     // Update is called once per frame
