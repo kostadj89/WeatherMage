@@ -24,6 +24,8 @@ public class SpellBoltProjectile : MonoBehaviour
     [SerializeField]
     private float projectileTailDeformationPower;
 
+    // added for any projectile destroyed event
+    public static event EventHandler<OnProjectileDestroyedArgs> OnAnyProjectileDestroyed;
     public event EventHandler<OnProjectileDestroyedArgs> OnProjectileDestroyed;
     public class OnProjectileDestroyedArgs : EventArgs
     {
@@ -68,6 +70,8 @@ public class SpellBoltProjectile : MonoBehaviour
             //unparent trail
             trailRenderer.transform.parent = null;
 
+            //aded for screen shake event but maybe just the static version should be kept
+            OnAnyProjectileDestroyed.Invoke(this, new OnProjectileDestroyedArgs { targetPosition = targetPosition, damage = damage });
             OnProjectileDestroyed.Invoke(this, new OnProjectileDestroyedArgs { targetPosition = targetPosition, damage = damage });
 
             Destroy(gameObject); 
