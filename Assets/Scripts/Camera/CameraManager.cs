@@ -44,6 +44,7 @@ public class CameraManager : MonoBehaviour
         switch (sender)
         {
             case ShootAction shootAction:
+            case AreaShootAction areaShootAction:
                 HideActionCamera();
                 break;
         }
@@ -55,7 +56,14 @@ public class CameraManager : MonoBehaviour
         {
             case ShootAction shootAction:
 
-                SetActionCamera(shootAction.GetUnit(), shootAction.GetTargetUnit());
+                SetActionCamera(shootAction.GetUnit(), shootAction.GetTargetUnit().GetWorldPosition());
+                //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetTargetUnit());
+                //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetTargetUnit());
+                //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetTargetUnit());
+                ShowActionCamera();
+                break;
+            case AreaShootAction areaShootAction:
+                SetActionCamera(areaShootAction.GetUnit(), LevelGrid.Instance.GetWorldFromGridPosition(areaShootAction.GetTargetGridPosition()));
                 //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetTargetUnit());
                 //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetTargetUnit());
                 //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetTargetUnit());
@@ -94,18 +102,18 @@ public class CameraManager : MonoBehaviour
         //actionCamera.RotateAround(midPoint, Vector3.right, 45f);
     }
 
-    private void SetActionCamera(Unit shooter, Unit targetUnit)
+    private void SetActionCamera(Unit shooter, Vector3 targetWorldPos)
     {
         CinemachineVirtualCamera actionCMVC = actionCamera.GetComponent<CinemachineVirtualCamera>();
 
         // Get the midpoint between the two units
-        Vector3 midpoint = (shooter.GetWorldPosition() + targetUnit.GetWorldPosition()) / 2.0f;
+        Vector3 midpoint = (shooter.GetWorldPosition() + targetWorldPos) / 2.0f;
 
         // Set the camera's position to the midpoint, offset by the zoom distance + unit height 1.7f
         actionCamera.position = midpoint+ new Vector3(0f,1.7f,0f) - Camera.main.transform.forward * zoomDistance;
 
         // Calculate the distance between the two units
-        float distance = Vector3.Distance(shooter.GetWorldPosition(), targetUnit.GetWorldPosition());
+        float distance = Vector3.Distance(shooter.GetWorldPosition(), targetWorldPos);
 
         // Adjust the Virtual Camera's properties
         actionCMVC.m_Lens.FieldOfView = 60; // Set the field of view to a default value
@@ -116,7 +124,7 @@ public class CameraManager : MonoBehaviour
         // Zoom the camera to frame both units
         Bounds bounds = new Bounds(midpoint, Vector3.zero);
         bounds.Encapsulate(shooter.GetWorldPosition());
-        bounds.Encapsulate(targetUnit.GetWorldPosition());
+        bounds.Encapsulate(targetWorldPos);
         actionCMVC.m_Lens.OrthographicSize = bounds.extents.magnitude;
     }
 
@@ -125,7 +133,7 @@ public class CameraManager : MonoBehaviour
         Vector3 shootDir = (targetUnit.GetWorldPosition() - shooter.GetWorldPosition()).normalized;
         Vector3 cameraPosition = shooter.GetWorldPosition() + new Vector3(0, 1.7f, 0);
         //Vector3 cameraPosition = shooter.GetWorldPosition() + (new Vector3(0, 1.7f, 0) + shooter.transform.right*rightOffset)+ shootDirectionOffset*shootDir;
-        //Vector3 cameraPosition = shooter.GetWorldPosition() + Vector3.right*(Vector3.Distance(shooter.GetWorldPosition(), targetUnit.GetWorldPosition()))+ new Vector3(0,6f,0);
+        //Vector3 cameraPosition = shooter.GetWorldPosition() + Vector3.right*(Vector3.Distance(shooter.GetWorldPosition(), targetGridPosition.GetWorldPosition()))+ new Vector3(0,6f,0);
         actionCamera.position = cameraPosition;
         actionCamera.Translate(Vector3.right * 10, Space.Self);
         actionCamera.LookAt(targetUnit.GetWorldPosition()+new Vector3(0,1.7f,0));

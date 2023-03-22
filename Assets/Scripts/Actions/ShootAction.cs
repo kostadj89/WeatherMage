@@ -33,12 +33,14 @@ public class ShootAction : BaseAction
     [SerializeField]
     private LayerMask obstacleLayerMask;
 
+    //projectlie to spawn
     [SerializeField]
     private Transform spellboltProjectilePrefab;
-
+    //practicali a location of the bone 
     [SerializeField]
     private Transform projectileSpawnPoint;
-
+    
+    //transforme of the spawned projectile
     private Transform spellboltTransform;
 
     //custom event args class defined below with attacker and target unit infos
@@ -223,7 +225,7 @@ public class ShootAction : BaseAction
 
     private void TakeAShot()
     {
-        //OnFireProjectile?.Invoke(this, new OnShootEventArgs(unit, targetUnit, damage));
+        //OnFireProjectile?.Invoke(this, new OnShootEventArgs(unit, targetGridPosition, damage));
         
         spellboltTransform = Instantiate(spellboltProjectilePrefab, projectileSpawnPoint.position, Quaternion.identity);        
 

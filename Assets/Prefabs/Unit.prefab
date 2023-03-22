@@ -245,6 +245,7 @@ GameObject:
   - component: {fileID: -1980350712886523692}
   - component: {fileID: -9037324105416926483}
   - component: {fileID: 3863818508511025050}
+  - component: {fileID: 5663713223201764365}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -384,6 +385,27 @@ MonoBehaviour:
   ragdollUnit: {fileID: 7128879759392369097, guid: ba82fad613abcf54696541cf6544b78d,
     type: 3}
   ARootBone: {fileID: 2148431314543011674}
+--- !u!114 &5663713223201764365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143951792390528796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91095c32124c56b4a870a2baa4a65f57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxShootRadius: 7
+  damage: 50
+  explosionRadius: 1
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  spellboltProjectilePrefab: {fileID: 1279203868380885394, guid: 2668aecb947f4544ba968b8a3244b09a,
+    type: 3}
+  projectileSpawnPoint: {fileID: 2143951792428461123}
 --- !u!1 &5039487774828287933
 GameObject:
   m_ObjectHideFlags: 0

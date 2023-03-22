@@ -62,6 +62,11 @@ public abstract class BaseAction : MonoBehaviour
         
     }
 
+    public bool IsActive()
+    {
+        return isActive;
+    }
+
     #region AI
 
     public ScoredEnemyAIAction GetBestScoreAndPosForAction()

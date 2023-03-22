@@ -20,8 +20,6 @@ public class GridSystemVisual : MonoBehaviour
         Purple
     }
 
-    private bool hideVisuals = false;
-
     [SerializeField] private Transform gridSystemVisualSinglePrefab;
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterials;
 
@@ -50,33 +48,19 @@ public class GridSystemVisual : MonoBehaviour
         LevelGrid.Instance.OnAnyUnitMoved += OnAnyUnitMoved_GridSystemVisual;
     }
 
-    private void OnBusyChanged_GridSystemVisual(object sender, bool e)
+    private void OnBusyChanged_GridSystemVisual(object sender, bool hideVisuals)
     {
-        hideVisuals = e;
+        UpdateGridVisuals();                
     }
 
     private void OnAnyUnitMoved_GridSystemVisual(object sender, EventArgs e)
     {
-        if (hideVisuals)
-        {
-            HideAllGridPositions();
-        }
-        else
-        {
-            UpdateGridVisuals();
-        }        
+        UpdateGridVisuals();
     }
 
     private void OnSelectedActionChanged_GridSystemVisual(object sender, EventArgs e)
     {
-        if (hideVisuals)
-        {
-            HideAllGridPositions();
-        }
-        else
-        {
-            UpdateGridVisuals();
-        }
+        UpdateGridVisuals();
     }
 
     // Update is called once per frame
@@ -107,25 +91,33 @@ public class GridSystemVisual : MonoBehaviour
         BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
         GridVisualType actionGridTypeVisual; 
 
-        switch (selectedAction)        
+        if (selectedAction != null && !selectedAction.IsActive()) 
         {
-            case MoveAction moveAction:
-                actionGridTypeVisual = GridVisualType.Purple;
-                break;
-            case SpinAction spinAction:
-                actionGridTypeVisual = GridVisualType.Blue;
-                break;
-            case ShootAction shootAction:
-                actionGridTypeVisual = GridVisualType.Red;
-                Unit unit = shootAction.GetUnit();
-                ShowGridPositionRange(unit.GetGridPosition(), shootAction.GetRadius(), GridVisualType.Purple);
-                break;
-            default:
-                actionGridTypeVisual = GridVisualType.Purple;
-                break;
-        };
+            switch (selectedAction)        
+            {
+                case MoveAction moveAction:
+                    actionGridTypeVisual = GridVisualType.Purple;
+                    break;
+                case SpinAction spinAction:
+                    actionGridTypeVisual = GridVisualType.Blue;
+                    break;
+                case ShootAction shootAction:
+                    actionGridTypeVisual = GridVisualType.Red;
+                    Unit unit = shootAction.GetUnit();
+                    ShowGridPositionRange(unit.GetGridPosition(), shootAction.GetRadius(), GridVisualType.Purple);
+                    break;
+                case AreaShootAction areaShootAction:
+                    actionGridTypeVisual = GridVisualType.Red;
+                    Unit unit1 = areaShootAction.GetUnit();
+                    ShowGridPositionRange(unit1.GetGridPosition(), areaShootAction.GetRadius(), GridVisualType.Purple);
+                    break;
+                default:
+                    actionGridTypeVisual = GridVisualType.Purple;
+                    break;
+            };
 
-        ShowGridPositions(selectedAction.GetAllValidGridPositionsForAction(), actionGridTypeVisual);
+            ShowGridPositions(selectedAction.GetAllValidGridPositionsForAction(), actionGridTypeVisual);
+        }
     }
 
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType)

@@ -40,13 +40,20 @@ public class UnitAnimationManager : MonoBehaviour
             //CustomProjectile.OnAnyProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
             //shootAction.OnFireProjectile += OnFire_AnimationManager;
         }
+
+        if (TryGetComponent<AreaShootAction>(out AreaShootAction areaShootAction))
+        {
+            areaShootAction.OnStartShooting += OnStartShooting_AnimationManager;
+            //CustomProjectile.OnAnyProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
+            //shootAction.OnFireProjectile += OnFire_AnimationManager;
+        }
     }
 
     private void OnFire_AnimationManager(object sender, ShootAction.OnShootEventArgs onShootEventArgs)
     {
         //spellboltTransform = Instantiate(spellboltProjectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
 
-        //Vector3 targetProjectilePos = onShootEventArgs.targetUnit.GetWorldPosition();
+        //Vector3 targetProjectilePos = onShootEventArgs.targetGridPosition.GetWorldPosition();
         
         ////set projectile height to be the same as the spawn height
         //targetProjectilePos.y += projectileSpawnPoint.position.y;
