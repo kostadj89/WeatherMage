@@ -47,7 +47,7 @@ public class MoveAction : BaseAction//, IAction
 
             transform.position += moveDirection * Time.deltaTime * moveSpeed;
 
-            float forwardRotateSpeed = 10;
+            float forwardRotateSpeed = 3;
             transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * forwardRotateSpeed);
         }
         else

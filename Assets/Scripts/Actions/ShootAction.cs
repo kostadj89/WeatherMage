@@ -67,7 +67,8 @@ public class ShootAction : BaseAction
         if (targetedUnit == targetUnit)
         {
             targetedUnit.TakeDamage(e.damage);
-        }        
+            ActionEnd();
+        }
     }
 
     public override string GetActionName()
@@ -217,7 +218,7 @@ public class ShootAction : BaseAction
                 state = ActionState.Aiming;
                 actionStateTimer = BEGIN_TIME;
 
-                ActionEnd();
+                //ActionEnd();
 
                 break;
         }

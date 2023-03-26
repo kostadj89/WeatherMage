@@ -163,4 +163,9 @@ public class UnitActionSystem : MonoBehaviour
         //OnActionFree?.Invoke(this, EventArgs.Empty);
         OnBusyChanged?.Invoke(this, isBusy);
     }
+
+    public bool GetIsBusy()
+    { 
+        return isBusy; 
+    }
 }

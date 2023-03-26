@@ -144,7 +144,13 @@ PrefabInstance:
       propertyPath: maxShootRadius
       value: 3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5663713223201764365, guid: 07c615ce4e0da4148905f4b5893f270b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5663713223201764365, guid: 07c615ce4e0da4148905f4b5893f270b, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 07c615ce4e0da4148905f4b5893f270b, type: 3}
 --- !u!4 &8530086263161449682 stripped

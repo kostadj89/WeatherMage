@@ -76,8 +76,12 @@ public class CustomProjectile : MonoBehaviour
 
             transform.position = targetPosition;
             Instantiate(projectileHitVFXPrefab, targetPosition, Quaternion.identity);
+
             //unparent trail
-            trailRenderer.transform.parent = null;
+            if (trailRenderer!=null)
+            {
+                trailRenderer.transform.parent = null;
+            }
 
             //aded for screen shake event but maybe just the static version should be kept
             OnProjectileDestroyed.Invoke(this, new OnProjectileDestroyedArgs { targetPosition = targetPosition, damage = damage });

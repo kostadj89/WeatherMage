@@ -47,7 +47,14 @@ public class GridObject
 
     public Unit GetUnit()
     {
-        return unitsAtGridObject[0];
+        if (unitsAtGridObject.Count > 0)
+        {
+            return unitsAtGridObject[0];
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public List<Unit> GetAllUnits()

@@ -85,4 +85,49 @@ public class LevelGrid : MonoBehaviour
         AddUnitAtGridPosition(toPos,unit);
         OnAnyUnitMoved?.Invoke(this, EventArgs.Empty);
     }
+
+    internal List<GridPosition> GetAllCellsInTheRange(Vector3 targetPosition, int range)
+    {
+        List<GridPosition> gridPositions= new List<GridPosition>();
+
+        GridPosition targetGridPosition = GetGridPosition(targetPosition);
+        GridPosition tempGridPosition;
+
+        for (int i = targetGridPosition.x - 1; i <= targetGridPosition.x +1; i++)
+        {
+            for (int j = targetGridPosition.y - 1; j <= targetGridPosition.y + 1; j++)
+            {
+                tempGridPosition = new GridPosition(i, j);
+
+                if (tempGridPosition == targetGridPosition)
+                {
+                    continue;
+                }
+
+                if (gridSystem.IsValidGridPosition(tempGridPosition))
+                {
+                    gridPositions.Add(tempGridPosition);
+                }
+            }
+        }
+
+        return gridPositions;
+    }
+
+    internal List<Unit> GetAllEnemiesFromTheCells(List<GridPosition> gridPositions)
+    {
+        List<Unit> units = new List<Unit>();
+        Unit tempUnit;
+
+        foreach (GridPosition gridPosition in gridPositions)
+        {
+            tempUnit = GetUnitAtGridPosition(gridPosition);
+            if (tempUnit != null)
+            {
+                units.Add(tempUnit);
+            }
+        }
+
+        return units;
+    }
 }

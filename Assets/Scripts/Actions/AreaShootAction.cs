@@ -39,7 +39,7 @@ public class AreaShootAction : BaseAction
     //projectlie to spawn
     [SerializeField]
     private Transform spellboltProjectilePrefab;
-    //practicali a location of the bone 
+    //practically a location of the bone 
     [SerializeField]
     private Transform projectileSpawnPoint;
 
@@ -48,29 +48,32 @@ public class AreaShootAction : BaseAction
 
     //custom event args class defined below with attacker and target unit infos
     public event EventHandler OnStartShooting;
-    public event EventHandler<OnShootEventArgs> OnProjectileFire;
-    public class OnShootEventArgs : EventArgs
+    public event EventHandler<OnAreaShootEventArgs> OnProjectileFire;
+    public class OnAreaShootEventArgs : EventArgs
     {
         public Unit shootingUnit;
-        public Unit targetUnit;
+        public GridPosition targetedGridPosition;
         public int damage;
 
-        public OnShootEventArgs(Unit shootingUnit, Unit targetUnit, int damage)
+        public OnAreaShootEventArgs(Unit shootingUnit, GridPosition target, int damage)
         {
             this.shootingUnit = shootingUnit;
-            this.targetUnit = targetUnit;
+            this.targetedGridPosition = target;
             this.damage = damage;
         }
     }
 
     private void OnProjectileDestroyed_ShootAction(object sender, OnProjectileDestroyedArgs e)
     {
-        //Unit targetedUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(e.targetPosition));
+        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(e.targetPosition, explosionRadius);
+        List<Unit> listOfAdjacent = LevelGrid.Instance.GetAllEnemiesFromTheCells(gridPositions);
 
-        //if (targetedUnit == targetGridPosition)
-        //{
-        //    targetedUnit.TakeDamage(e.damage);
-        //}
+        foreach (Unit adjacentUnit in listOfAdjacent)
+        {
+            adjacentUnit.TakeDamage(e.damage);
+        }
+
+        ActionEnd();
     }
 
     public override string GetActionName()
@@ -151,9 +154,9 @@ public class AreaShootAction : BaseAction
         canTakeAShot = true;
         //unit enters aiming state
         Debug.Log("Aiming");
-               
-        OnStartShooting?.Invoke(this,EventArgs.Empty);
+
         ActionStart(OnCompleteAction);
+        OnStartShooting?.Invoke(this,EventArgs.Empty);        
     }
 
     // Start is called before the first frame update
@@ -220,8 +223,7 @@ public class AreaShootAction : BaseAction
 
                 state = ActionState.Aiming;
                 actionStateTimer = BEGIN_TIME;
-
-                ActionEnd();
+                //ActionEnd();
 
                 break;
         }
@@ -241,14 +243,9 @@ public class AreaShootAction : BaseAction
         CustomProjectile sp = spellboltTransform.GetComponent<CustomProjectile>();
         sp.Setup(targetProjectilePos);
         //listen for when it is destroyed
-        sp.OnProjectileDestroyed += OnProjectileDestroyed_ShootAction;
         sp.SetDamage(damage);
+        sp.OnProjectileDestroyed += OnProjectileDestroyed_ShootAction;        
     }
-
-    //public Unit GetTargetUnit()
-    //{
-    //    return targetGridPosition;
-    //}
 
     public GridPosition GetTargetGridPosition()
     { 

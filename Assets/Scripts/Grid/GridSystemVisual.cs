@@ -89,9 +89,10 @@ public class GridSystemVisual : MonoBehaviour
     {
         HideAllGridPositions();
         BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
-        GridVisualType actionGridTypeVisual; 
+        GridVisualType actionGridTypeVisual;
 
-        if (selectedAction != null && !selectedAction.IsActive()) 
+        //if (selectedAction != null && !selectedAction.IsActive() && !UnitActionSystem.Instance.GetIsBusy()) 
+        if (selectedAction != null && !UnitActionSystem.Instance.GetIsBusy())
         {
             switch (selectedAction)        
             {
