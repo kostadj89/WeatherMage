@@ -114,7 +114,7 @@ public class LevelGrid : MonoBehaviour
         return gridPositions;
     }
 
-    internal List<Unit> GetAllEnemiesFromTheCells(List<GridPosition> gridPositions)
+    internal List<Unit> GetAllUnitsFromTheCells(List<GridPosition> gridPositions)
     {
         List<Unit> units = new List<Unit>();
         Unit tempUnit;

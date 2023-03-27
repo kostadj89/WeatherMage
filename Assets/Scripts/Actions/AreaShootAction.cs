@@ -32,7 +32,7 @@ public class AreaShootAction : BaseAction
     [SerializeField]
     private int damage = 35;
     [SerializeField]
-    private int explosionRadius = 1;
+    private int explosionAreaRadius = 1;
     [SerializeField]
     private LayerMask obstacleLayerMask;
 
@@ -65,8 +65,8 @@ public class AreaShootAction : BaseAction
 
     private void OnProjectileDestroyed_ShootAction(object sender, OnProjectileDestroyedArgs e)
     {
-        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(e.targetPosition, explosionRadius);
-        List<Unit> listOfAdjacent = LevelGrid.Instance.GetAllEnemiesFromTheCells(gridPositions);
+        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(e.targetPosition, explosionAreaRadius);
+        List<Unit> listOfAdjacent = LevelGrid.Instance.GetAllUnitsFromTheCells(gridPositions);
 
         foreach (Unit adjacentUnit in listOfAdjacent)
         {
@@ -274,8 +274,28 @@ public class AreaShootAction : BaseAction
 
     public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
     {
-        Unit potentialEnemy = LevelGrid.Instance.GetUnitAtGridPosition(gridPos);
-        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 100 + Mathf.RoundToInt((1f- potentialEnemy.GetCurrentHealthPercentage())*10) };
+        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(LevelGrid.Instance.GetWorldFromGridPosition(gridPos), explosionAreaRadius);
+        List<Unit> listOfAdjacent = LevelGrid.Instance.GetAllUnitsFromTheCells(gridPositions);
+
+        int score = 0;
+        int numberOfEnemies = 0, numberOfFriendlies = 0;
+
+        foreach (Unit adjacentUnit in listOfAdjacent)
+        {
+            if (adjacentUnit.IsEnemy() == unit.IsEnemy())
+            {
+                numberOfFriendlies++;
+                score -= 10;
+            }
+            else
+            {
+                numberOfEnemies++;
+                score += 10;
+            }
+        }
+
+        score += 100 * numberOfEnemies - 50 * numberOfFriendlies;
+        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = score };
     }
 
     
