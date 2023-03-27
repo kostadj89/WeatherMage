@@ -43,9 +43,17 @@ public class UnitAnimationManager : MonoBehaviour
 
         if (TryGetComponent<AreaShootAction>(out AreaShootAction areaShootAction))
         {
-            areaShootAction.OnStartShooting += OnStartShooting_AnimationManager;
+            areaShootAction.OnStartShooting += OnStartAreaShooting_AnimationManager;
             //CustomProjectile.OnAnyProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
             //shootAction.OnFireProjectile += OnFire_AnimationManager;
+        }
+    }
+
+    private void OnStartAreaShooting_AnimationManager(object sender, EventArgs e)
+    {
+        if (unitAnimator != null)
+        {
+            unitAnimator.SetTrigger("TakeAPowerShot");
         }
     }
 

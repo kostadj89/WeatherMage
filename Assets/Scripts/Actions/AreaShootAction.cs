@@ -7,7 +7,7 @@ using static CustomProjectile;
 
 public class AreaShootAction : BaseAction
 {
-    private const float BEGIN_TIME = 1.1f;
+    private const float BEGIN_TIME = 1.8f;
     private const float SHOOTING_TIME = 0.1f;
     private const float COOLOFF_TIME = 0.5f;
    
