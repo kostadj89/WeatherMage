@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ public class GridObject
 {
     private GridSystem<GridObject> gridSystem;
     private GridPosition gridCellPosition;
-    private List<Unit> unitsAtGridObject;
+    private List<ICanTakeDamage> damagableObjectsAtGridObject;
        
     public GridObject(GridPosition gridCell)
     {
@@ -17,39 +18,46 @@ public class GridObject
     {
         this.gridSystem = gridSystem;
         this.gridCellPosition = gridCell;
-        this.unitsAtGridObject = new List<Unit>();
+        this.damagableObjectsAtGridObject = new List<ICanTakeDamage>();
     }
 
-    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell, List<Unit> unitsAtGridObject) : this(gridSystem, gridCell)
+    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell, List<ICanTakeDamage> unitsAtGridObject) : this(gridSystem, gridCell)
     {
         if (unitsAtGridObject == null)
         {
-            this.unitsAtGridObject = new List<Unit>();
+            this.damagableObjectsAtGridObject = new List<ICanTakeDamage>();
         }
         else 
         { 
-            this.unitsAtGridObject = unitsAtGridObject; 
+            this.damagableObjectsAtGridObject = unitsAtGridObject; 
         }        
     }
 
-    public void AddUnit(Unit unit)
+    public void AddUnitOrDestructible(ICanTakeDamage unitOrDestructible)
     {
-        this.unitsAtGridObject.Add(unit);
+        this.damagableObjectsAtGridObject.Add(unitOrDestructible);
     }
 
-    public void RemoveUnit(Unit unit)
+    public void RemoveUnitOrDestructible(ICanTakeDamage unitOrDestructible)
     {
-        if (this.unitsAtGridObject.Contains(unit))
+        if (this.damagableObjectsAtGridObject.Contains(unitOrDestructible))
         {
-            this.unitsAtGridObject.Remove(unit);
+            this.damagableObjectsAtGridObject.Remove(unitOrDestructible);
         }        
     }
 
     public Unit GetUnit()
     {
-        if (unitsAtGridObject.Count > 0)
+        if (damagableObjectsAtGridObject.Count > 0)
         {
-            return unitsAtGridObject[0];
+            switch (damagableObjectsAtGridObject[0])
+            {
+                case Unit unitAtPosition:
+                    return unitAtPosition;
+                default:
+                    return null;
+            }
+            
         }
         else
         {
@@ -57,15 +65,27 @@ public class GridObject
         }
     }
 
-    public List<Unit> GetAllUnits()
+    public ICanTakeDamage GetUnitOrDestructible()
+    {
+        if (damagableObjectsAtGridObject.Count > 0)
+        {
+            return damagableObjectsAtGridObject[0];           
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public List<ICanTakeDamage> GetAllUnitsAndDamagableObjects()
     { 
-        return unitsAtGridObject;
+        return damagableObjectsAtGridObject;
     }
 
     public override string ToString()
     {
         string unitString = string.Empty;
-        foreach (Unit unit in unitsAtGridObject)
+        foreach (ICanTakeDamage unit in damagableObjectsAtGridObject)
         {
             unitString += unit + "\n";
         }
@@ -74,6 +94,6 @@ public class GridObject
 
     public bool IsOccupied()
     {
-        return unitsAtGridObject.Count > 0;
+        return damagableObjectsAtGridObject.Count > 0;
     }
 }

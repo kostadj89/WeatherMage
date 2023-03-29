@@ -56,17 +56,17 @@ public class CameraManager : MonoBehaviour
         {
             case ShootAction shootAction:
 
-                SetActionCamera(shootAction.GetUnit(), shootAction.GetTargetUnit().GetWorldPosition());
-                //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetTargetUnit());
-                //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetTargetUnit());
-                //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetTargetUnit());
+                SetActionCamera(shootAction.GetUnit(), shootAction.GetPotentionalTarget().GetWorldPosition());
+                //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
+                //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
+                //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
                 ShowActionCamera();
                 break;
             case AreaShootAction areaShootAction:
                 SetActionCamera(areaShootAction.GetUnit(), LevelGrid.Instance.GetWorldFromGridPosition(areaShootAction.GetTargetGridPosition()));
-                //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetTargetUnit());
-                //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetTargetUnit());
-                //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetTargetUnit());
+                //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
+                //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
+                //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
                 ShowActionCamera();
                 break;
         }

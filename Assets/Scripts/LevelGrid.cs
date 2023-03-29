@@ -1,3 +1,5 @@
+using Assets.Scripts;
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,15 +51,24 @@ public class LevelGrid : MonoBehaviour
     public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
     {
         GridObject gridObject= this.gridSystem.GetGridObjectFromGridPos(gridPosition);
-        if (gridObject != null && !gridObject.GetAllUnits().Contains(unit)) 
+        if (gridObject != null && !gridObject.GetAllUnitsAndDamagableObjects().Contains(unit)) 
         { 
-            this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.AddUnit(unit);
+            this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.AddUnitOrDestructible(unit);
         }
     }
 
-    public List<Unit> GetUnitsAtGridPosition(GridPosition gridPosition)
+    public void AddDestructibleAtGridPosition(GridPosition gridPosition, ICanTakeDamage destructible)
     {
-        return this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.GetAllUnits();
+        GridObject gridObject = this.gridSystem.GetGridObjectFromGridPos(gridPosition);
+        if (gridObject != null && !gridObject.GetAllUnitsAndDamagableObjects().Contains(destructible))
+        {
+            this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.AddUnitOrDestructible(destructible);
+        }
+    }
+
+    public List<ICanTakeDamage> GetUnitsAtGridPosition(GridPosition gridPosition)
+    {
+        return this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.GetAllUnitsAndDamagableObjects();
     }
 
     public Unit GetUnitAtGridPosition(GridPosition gridPosition)
@@ -65,9 +76,14 @@ public class LevelGrid : MonoBehaviour
         return this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.GetUnit();
     }
 
-    public void ClearUnitAtGridPosition(GridPosition gridPosition, Unit unit)
+    public ICanTakeDamage GetUnitOrDestructibleAtGridPosition(GridPosition gridPosition)
     {
-        this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.RemoveUnit(unit);
+        return this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.GetUnitOrDestructible();
+    }
+
+    public void ClearUnitOrDestructibleAtGridPosition(GridPosition gridPosition, ICanTakeDamage unit)
+    {
+        this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.RemoveUnitOrDestructible(unit);
     }
 
     //expose gridSystem
@@ -81,7 +97,7 @@ public class LevelGrid : MonoBehaviour
 
     public void UnitMovedGridPosition(Unit unit,GridPosition fromPos,GridPosition toPos)
     {         
-        ClearUnitAtGridPosition(fromPos, unit);
+        ClearUnitOrDestructibleAtGridPosition(fromPos, unit);
         AddUnitAtGridPosition(toPos,unit);
         OnAnyUnitMoved?.Invoke(this, EventArgs.Empty);
     }
@@ -114,20 +130,20 @@ public class LevelGrid : MonoBehaviour
         return gridPositions;
     }
 
-    internal List<Unit> GetAllUnitsFromTheCells(List<GridPosition> gridPositions)
+    internal List<ICanTakeDamage> GetAllPotentionalTargetsFromTheCells(List<GridPosition> gridPositions)
     {
-        List<Unit> units = new List<Unit>();
-        Unit tempUnit;
+        List<ICanTakeDamage> potentionalTargets = new List<ICanTakeDamage>();
+        ICanTakeDamage tempTarget;
 
         foreach (GridPosition gridPosition in gridPositions)
         {
-            tempUnit = GetUnitAtGridPosition(gridPosition);
-            if (tempUnit != null)
+            tempTarget = GetUnitOrDestructibleAtGridPosition(gridPosition);
+            if (tempTarget != null)
             {
-                units.Add(tempUnit);
+                potentionalTargets.Add(tempTarget);
             }
         }
 
-        return units;
+        return potentionalTargets;
     }
 }

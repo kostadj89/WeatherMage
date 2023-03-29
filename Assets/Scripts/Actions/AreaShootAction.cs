@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ public class AreaShootAction : BaseAction
     private ActionState state = ActionState.Aiming;
     private float actionStateTimer = BEGIN_TIME;
 
-    //private Unit targetUnit;
+    //private Unit potentionalTarget;
     private GridPosition targetGridPosition;
 
     [SerializeField]
@@ -66,11 +67,11 @@ public class AreaShootAction : BaseAction
     private void OnProjectileDestroyed_ShootAction(object sender, OnProjectileDestroyedArgs e)
     {
         List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(e.targetPosition, explosionAreaRadius);
-        List<Unit> listOfAdjacent = LevelGrid.Instance.GetAllUnitsFromTheCells(gridPositions);
+        List<ICanTakeDamage> listOfAdjacent = LevelGrid.Instance.GetAllPotentionalTargetsFromTheCells(gridPositions);
 
-        foreach (Unit adjacentUnit in listOfAdjacent)
+        foreach (ICanTakeDamage adjacentTarget in listOfAdjacent)
         {
-            adjacentUnit.TakeDamage(e.damage);
+            adjacentTarget.TakeDamage(e.damage);
         }
 
         ActionEnd();
@@ -275,14 +276,14 @@ public class AreaShootAction : BaseAction
     public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
     {
         List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(LevelGrid.Instance.GetWorldFromGridPosition(gridPos), explosionAreaRadius);
-        List<Unit> listOfAdjacent = LevelGrid.Instance.GetAllUnitsFromTheCells(gridPositions);
+        List<ICanTakeDamage> listOfAdjacent = LevelGrid.Instance.GetAllPotentionalTargetsFromTheCells(gridPositions);
 
         int score = 0;
         int numberOfEnemies = 0, numberOfFriendlies = 0;
 
-        foreach (Unit adjacentUnit in listOfAdjacent)
+        foreach (ICanTakeDamage adjacentTarget in listOfAdjacent)
         {
-            if (adjacentUnit.IsEnemy() == unit.IsEnemy())
+            if (adjacentTarget.IsOnSameTeam(unit.IsEnemy()))
             {
                 numberOfFriendlies++;
                 score -= 10;

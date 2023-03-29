@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ public class ShootAction : BaseAction
     private ActionState state = ActionState.Aiming;
     private float actionStateTimer = BEGIN_TIME;
     
-    private Unit targetUnit;
+    private ICanTakeDamage potentionalTarget;
 
     [SerializeField]
     private int maxShootRadius = 7;
@@ -49,24 +50,24 @@ public class ShootAction : BaseAction
     public class OnShootEventArgs : EventArgs
     {
         public Unit shootingUnit;
-        public Unit targetUnit;
+        public ICanTakeDamage potentionalTarget;
         public int damage;
 
-        public OnShootEventArgs(Unit shootingUnit, Unit targetUnit, int damage)
+        public OnShootEventArgs(Unit shootingUnit, ICanTakeDamage targetUnitOrDestructible, int damage)
         {
             this.shootingUnit = shootingUnit;
-            this.targetUnit = targetUnit;
+            this.potentionalTarget = targetUnitOrDestructible;
             this.damage = damage;
         }
     }
 
     private void OnProjectileDestroyed_ShootAction(object sender, OnProjectileDestroyedArgs e)
     {
-        Unit targetedUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(e.targetPosition));
+        ICanTakeDamage target = LevelGrid.Instance.GetUnitOrDestructibleAtGridPosition(LevelGrid.Instance.GetGridPosition(e.targetPosition));
 
-        if (targetedUnit == targetUnit)
+        if (target == potentionalTarget)
         {
-            targetedUnit.TakeDamage(e.damage);
+            target.TakeDamage(e.damage);
             ActionEnd();
         }
     }
@@ -113,19 +114,18 @@ public class ShootAction : BaseAction
                 }
 
                 //check to see if the unit is on the same team as the playing unit, if yes ignore
-                Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPos);
-
-                //check to see if both units are on the same team
-                if (targetUnit.IsEnemy() == unit.IsEnemy())
+                ICanTakeDamage targetUnitOrDestructible = LevelGrid.Instance.GetUnitOrDestructibleAtGridPosition(testGridPos);
+                
+                if (targetUnitOrDestructible.IsOnSameTeam(unit.IsEnemy()))
                 {
                     continue;
-                }
+                }                
 
                 //if there are obcastles ignore
                 if(Physics.Raycast(
                     LevelGrid.Instance.GetWorldFromGridPosition(originGridPosition) + Vector3.up * 1.7f,
-                    (targetUnit.GetWorldPosition()-unit.GetWorldPosition()).normalized,
-                    Vector3.Distance(targetUnit.GetWorldPosition(),unit.GetWorldPosition()),
+                    (targetUnitOrDestructible.GetWorldPosition()-unit.GetWorldPosition()).normalized,
+                    Vector3.Distance(targetUnitOrDestructible.GetWorldPosition(),unit.GetWorldPosition()),
                     obstacleLayerMask))
                 {
                     continue;
@@ -143,7 +143,7 @@ public class ShootAction : BaseAction
     public override void TakeAction(Action OnCompleteAction, GridPosition gridPosition)
     {
         //unit we shoot at
-        targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition);
+        potentionalTarget = LevelGrid.Instance.GetUnitOrDestructibleAtGridPosition(gridPosition);
 
         canTakeAShot = true;
         //unit enters aiming state
@@ -171,7 +171,7 @@ public class ShootAction : BaseAction
             case ActionState.Aiming:
                 
                 //rotating
-                Vector3 aimDirection = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+                Vector3 aimDirection = (potentionalTarget.GetWorldPosition() - unit.GetWorldPosition()).normalized;
                 transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * forwardRotateSpeed);
 
                 break;
@@ -230,7 +230,7 @@ public class ShootAction : BaseAction
         
         spellboltTransform = Instantiate(spellboltProjectilePrefab, projectileSpawnPoint.position, Quaternion.identity);        
 
-        Vector3 targetProjectilePos = targetUnit.GetWorldPosition();
+        Vector3 targetProjectilePos = potentionalTarget.GetWorldPosition();
 
         //set projectile height to be the same as the spawn height
         targetProjectilePos.y += projectileSpawnPoint.position.y;
@@ -242,9 +242,9 @@ public class ShootAction : BaseAction
         sp.SetDamage(damage);
     }
 
-    public Unit GetTargetUnit()
+    public ICanTakeDamage GetPotentionalTarget()
     {
-        return targetUnit;
+        return potentionalTarget;
     }
 
     public Unit GetUnit()
@@ -269,8 +269,18 @@ public class ShootAction : BaseAction
 
     public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
     {
-        Unit potentialEnemy = LevelGrid.Instance.GetUnitAtGridPosition(gridPos);
-        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 100 + Mathf.RoundToInt((1f- potentialEnemy.GetCurrentHealthPercentage())*10) };
+        int customScore = 0;
+        switch( LevelGrid.Instance.GetUnitOrDestructibleAtGridPosition(gridPos))
+        {
+            case Unit potentialEnemy:
+                customScore += Mathf.RoundToInt((1f - potentialEnemy.GetCurrentHealthPercentage()) * 10)+7;
+            break;
+            case DestructibleMesh destructibleMesh:
+                customScore += 5;
+                break;
+        }
+         
+        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 100 + customScore };
     }
 
     

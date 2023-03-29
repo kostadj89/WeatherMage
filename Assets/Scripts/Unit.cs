@@ -1,10 +1,11 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour, ICanTakeDamage
 {
     public static event EventHandler OnAnyActionPointsChanged;
     public static event EventHandler OnAnyUnitSpawned;
@@ -65,7 +66,7 @@ public class Unit : MonoBehaviour
 
     private void Die(object sender, EventArgs e)
     {
-        LevelGrid.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
+        LevelGrid.Instance.ClearUnitOrDestructibleAtGridPosition(currentGridPosition, this);
         OnAnyUnitDead?.Invoke(this,EventArgs.Empty);
         Destroy(gameObject);
     }
@@ -146,7 +147,7 @@ public class Unit : MonoBehaviour
         return healthSystem.GetNormalizedHealth();
     }
 
-    internal void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         Debug.Log(this + " has been shot!");
         healthSystem.TakeDamage(damage);
@@ -155,5 +156,10 @@ public class Unit : MonoBehaviour
     private void OnDestroy()
     {
         TurnSystem.Instance.OnTurnEnded -= UpdateUnitOnTurnEnded;
+    }
+
+    public bool IsOnSameTeam(bool isEnemy)
+    {
+        return this.IsEnemy() == isEnemy;
     }
 }
