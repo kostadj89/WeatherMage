@@ -37,15 +37,24 @@ public class UnitAnimationManager : MonoBehaviour
         if (TryGetComponent<ShootAction>(out ShootAction shootAction))
         {
             shootAction.OnStartShooting += OnStartShooting_AnimationManager;
-            //CustomProjectile.OnAnyProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
-            //shootAction.OnFireProjectile += OnFire_AnimationManager;
         }
 
         if (TryGetComponent<AreaShootAction>(out AreaShootAction areaShootAction))
         {
-            areaShootAction.OnStartShooting += OnStartAreaShooting_AnimationManager;
-            //CustomProjectile.OnAnyProjectileDestroyed += OnProjectileDestroyed_UnitAnimator;
-            //shootAction.OnFireProjectile += OnFire_AnimationManager;
+            areaShootAction.OnStartShooting += OnStartAreaShooting_AnimationManager;            
+        }
+
+        if (TryGetComponent<MeleeAction>(out MeleeAction meleeAction))
+        {
+            meleeAction.OnStartMelee += OnStartMelee_AnimationManager;
+        }
+    }
+
+    private void OnStartMelee_AnimationManager(object sender, EventArgs e)
+    {
+        if (unitAnimator != null)
+        {
+            unitAnimator.SetTrigger("TakeALightSwing");
         }
     }
 

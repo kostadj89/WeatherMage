@@ -28,11 +28,13 @@ public abstract class BaseAction : MonoBehaviour
         return validGridPositions.Contains(gridPosition);
     }
 
+    //returns the action point of action
     public virtual int GetActionCost()
     {
         return 1;
     }
 
+    //marks action as active, adds onComplete and invokes on any action start, these are currently used for notifing action camera 
     protected void ActionStart(Action onCompleteAction)
     {
         isActive = true;
@@ -41,6 +43,7 @@ public abstract class BaseAction : MonoBehaviour
         OnAnyActionStart?.Invoke(this, EventArgs.Empty);
     }
 
+    //marks the action as inactive and calls onActionComplete, as well as any action end which is, again used for action camera
     protected void ActionEnd()
     {
         isActive = false;

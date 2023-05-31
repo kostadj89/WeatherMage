@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: -9037324105416926483}
   - component: {fileID: 3863818508511025050}
   - component: {fileID: 5663713223201764365}
+  - component: {fileID: -2076824960352354070}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -399,13 +400,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxShootRadius: 7
   damage: 50
-  explosionRadius: 1
+  explosionAreaRadius: 1
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 256
   spellboltProjectilePrefab: {fileID: 1279203868380885394, guid: 2668aecb947f4544ba968b8a3244b09a,
     type: 3}
   projectileSpawnPoint: {fileID: 2143951792428461123}
+--- !u!114 &-2076824960352354070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143951792390528796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9430b1ae70783954bbb30df7d8f029ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSwordRadius: 1
+  meleeDamage: 75
 --- !u!1 &5039487774828287933
 GameObject:
   m_ObjectHideFlags: 0

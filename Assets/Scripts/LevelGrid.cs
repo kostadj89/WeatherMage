@@ -115,10 +115,10 @@ public class LevelGrid : MonoBehaviour
             {
                 tempGridPosition = new GridPosition(i, j);
 
-                if (tempGridPosition == targetGridPosition)
-                {
-                    continue;
-                }
+                //if (tempGridPosition == targetGridPosition)
+                //{
+                //    continue;
+                //}
 
                 if (gridSystem.IsValidGridPosition(tempGridPosition))
                 {

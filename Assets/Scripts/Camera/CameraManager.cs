@@ -45,6 +45,7 @@ public class CameraManager : MonoBehaviour
         {
             case ShootAction shootAction:
             case AreaShootAction areaShootAction:
+            case MeleeAction meleeAction:
                 HideActionCamera();
                 break;
         }
@@ -57,16 +58,14 @@ public class CameraManager : MonoBehaviour
             case ShootAction shootAction:
 
                 SetActionCamera(shootAction.GetUnit(), shootAction.GetPotentionalTarget().GetWorldPosition());
-                //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
-                //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
-                //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
                 ShowActionCamera();
                 break;
             case AreaShootAction areaShootAction:
                 SetActionCamera(areaShootAction.GetUnit(), LevelGrid.Instance.GetWorldFromGridPosition(areaShootAction.GetTargetGridPosition()));
-                //SetActionCameraPositionLookAtTarget(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
-                //SetActionCameraPositionToMidPoint(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
-                //SetActionCameraPositionToUnitShoulder(shootAction.GetUnit(), shootAction.GetPotentionalTarget());
+                ShowActionCamera();
+                break;
+            case MeleeAction meleeAction:
+                SetActionCamera(meleeAction.GetUnit(), meleeAction.GetPotentionalTarget().GetWorldPosition());
                 ShowActionCamera();
                 break;
         }
