@@ -21,8 +21,18 @@ public class MeleeAction : BaseAction
     private float actionStateTimer;
     private ActionState state;
 
+    //animation params
     private bool canTakeASwing = false;
     private float forwardRotateSpeed = 10;
+
+    //stuff regarding showing weapon, i was thinking of adding item visuals via abilities/weapon skills. so these params would control if the weapon is shown as equipped or if it's materializing
+    //probs shouldn't be here but i'll change it later
+    [SerializeField]
+    private bool isEquippedAsItem = false;
+    [SerializeField]
+    private bool isMaterializing = true;
+    [SerializeField]
+    private GameObject itemVisual;
 
     private enum ActionState
     {
@@ -102,7 +112,23 @@ public class MeleeAction : BaseAction
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (itemVisual != null) 
+        { 
+            SetStartingItemVisibility();
+        }
+    }
+
+    private void SetStartingItemVisibility()
+    {
+        itemVisual.SetActive(isEquippedAsItem && !isMaterializing);
+    }
+
+    private void SetItemVisibility(bool visibility)
+    {
+        if (itemVisual != null)
+        {
+            itemVisual.SetActive(visibility);
+        }
     }
 
     // Update is called once per frame
@@ -121,7 +147,7 @@ public class MeleeAction : BaseAction
                 break;
             case ActionState.BeforeTheSwing:
 
-                //rotating
+                //rotating                
                 Vector3 aimDirection = (potentionalTarget.GetWorldPosition() - unit.GetWorldPosition()).normalized;
                 transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * forwardRotateSpeed);
 
@@ -155,6 +181,10 @@ public class MeleeAction : BaseAction
         switch (state)
         {
             case ActionState.None:
+                
+                //make item visible
+                SetItemVisibility(isMaterializing);
+
                 state = ActionState.BeforeTheSwing;
                 OnStartMelee?.Invoke(this, EventArgs.Empty);
                 actionStateTimer = SWINGING_TIME;
@@ -166,6 +196,8 @@ public class MeleeAction : BaseAction
                 break;
             case ActionState.AfterTheSwing:
                 state = ActionState.None;
+
+                SetItemVisibility(!isMaterializing);
                 ActionEnd();
 
                 break;
