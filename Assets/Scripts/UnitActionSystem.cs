@@ -58,7 +58,7 @@ public class UnitActionSystem : MonoBehaviour
 
         if (EventSystem.current.IsPointerOverGameObject()) { return; }
 
-        if (Input.GetMouseButtonDown(0))
+        if (InputManager.Instance.GetMouseButtonDown())
         {
            
             // if it's true that means that we've selected a unit, so no moving
@@ -71,7 +71,7 @@ public class UnitActionSystem : MonoBehaviour
     //tries tor raycast to unit, if it suceeds returns true otherwise false
     private bool HandleUnitSelection()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetMousePosition());
 
         //if(Input.GetMouseButtonDown(0) && raycastHit.) { } this is ok, but Raycast returns true if there is a hit with an object from the layer unitLayerMAsk
 
@@ -101,7 +101,7 @@ public class UnitActionSystem : MonoBehaviour
 
     private void HandleSelectedAction()
     { 
-        if (Input.GetMouseButtonDown(0))
+        if (InputManager.Instance.GetMouseButtonDown())
         {
             //we're tying actions for grid cells, each action will have a grid cell as a target
             GridPosition mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition());

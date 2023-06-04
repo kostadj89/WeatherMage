@@ -28,8 +28,10 @@ public class MouseWorld : MonoBehaviour
     {
         //creates a ray from camera to a mouse position
         //raycast works with physics, colliders, and not visualsw
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetMousePosition());
         Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, instance.mousePlaneLayerMask);
         return raycastHit.point;
     }
+
+    
 }
