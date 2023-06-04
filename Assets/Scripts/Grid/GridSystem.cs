@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+//the structure which keeps data about grid tile location
 public struct GridPosition : IEquatable<GridPosition>
 {
     public int x;
@@ -57,6 +58,8 @@ public struct GridPosition : IEquatable<GridPosition>
         return new GridPosition(v.x - u.x, v.y - u.y);
     }
 }
+
+//each grid tile is determined by the TGridObject, and grid position; grid obj will hold the info about gridPosition
 public class GridSystem<TGridObject>
 { 
     private int width, height;

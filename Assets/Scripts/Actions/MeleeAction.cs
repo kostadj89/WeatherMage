@@ -95,7 +95,7 @@ public class MeleeAction : BaseAction
 
     public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
     {
-        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 130 };
+        return new ScoredEnemyAIAction { gridPosition = gridPos, actionValue = 170 };
     }
 
     public override void TakeAction(Action OnCompleteAction, GridPosition gridPosition)

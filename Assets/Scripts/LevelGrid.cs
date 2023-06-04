@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
+//holds logic for creating a level grid, and manipulation of grid objects, like adding stuff to grid cells
 public class LevelGrid : MonoBehaviour
 {
     public static LevelGrid Instance { get; private set; }
@@ -57,6 +58,16 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
+    //this is bad because i'm lazy i've hardcoded that there could only be one interactible... because i haven't determined yet.. ugh probabbly only one thing, unit, destructible and interactible should be on the tile.. but maybe not.. for example, a door can be on one tile, but when the door opens unit should be able to stand on the same tile ok ok
+    public void AddInteractibleAtGridPosition(GridPosition gridPosition, IInteractible interactible)
+    {
+        GridObject gridObject = this.gridSystem.GetGridObjectFromGridPos(gridPosition);
+        if (gridObject != null && gridObject.GetInteractible()!= interactible)
+        {
+            this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.SetInteractible(interactible);
+        }
+    }
+
     public void AddDestructibleAtGridPosition(GridPosition gridPosition, ICanTakeDamage destructible)
     {
         GridObject gridObject = this.gridSystem.GetGridObjectFromGridPos(gridPosition);
@@ -76,6 +87,11 @@ public class LevelGrid : MonoBehaviour
         return this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.GetUnit();
     }
 
+    public IInteractible GetInteractibleAtGridPosition(GridPosition gridPosition)
+    {
+        return this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.GetInteractible();
+    }
+
     public ICanTakeDamage GetUnitOrDestructibleAtGridPosition(GridPosition gridPosition)
     {
         return this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.GetUnitOrDestructible();
@@ -84,6 +100,11 @@ public class LevelGrid : MonoBehaviour
     public void ClearUnitOrDestructibleAtGridPosition(GridPosition gridPosition, ICanTakeDamage unit)
     {
         this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.RemoveUnitOrDestructible(unit);
+    }
+
+    public void ClearInteractibleAtGridPosition(GridPosition gridPosition, IInteractible interactible)
+    {
+        this.gridSystem.GetGridObjectFromGridPos(gridPosition)?.RemoveInteractible(interactible);
     }
 
     //expose gridSystem

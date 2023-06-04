@@ -2,13 +2,16 @@ using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+//holds logic if the grid tile is occupied or not, and references and methods for getting occupying units, destructibles as well as interactibles
 public class GridObject
 {
     private GridSystem<GridObject> gridSystem;
     private GridPosition gridCellPosition;
     private List<ICanTakeDamage> damagableObjectsAtGridObject;
+    private List<IInteractible> interactibles;
        
     public GridObject(GridPosition gridCell)
     {
@@ -19,6 +22,7 @@ public class GridObject
         this.gridSystem = gridSystem;
         this.gridCellPosition = gridCell;
         this.damagableObjectsAtGridObject = new List<ICanTakeDamage>();
+        this.interactibles = new List<IInteractible>();
     }
 
     public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell, List<ICanTakeDamage> unitsAtGridObject) : this(gridSystem, gridCell)
@@ -77,6 +81,24 @@ public class GridObject
         }
     }
 
+    public IInteractible GetInteractible()
+    {
+        return interactibles.Count >0? interactibles.First(): null;
+    }
+
+    public void SetInteractible(IInteractible interactible)
+    {
+        if (interactibles.Contains(interactible)) { return; }
+        interactibles.Add(interactible);
+    }
+    internal void RemoveInteractible(IInteractible interactible)
+    {
+        if (this.interactibles.Contains(interactible))
+        {
+            this.interactibles.Remove(interactible);
+        }
+    }
+
     public List<ICanTakeDamage> GetAllUnitsAndDamagableObjects()
     { 
         return damagableObjectsAtGridObject;
@@ -96,4 +118,6 @@ public class GridObject
     {
         return damagableObjectsAtGridObject.Count > 0;
     }
+
+   
 }

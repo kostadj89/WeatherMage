@@ -359,6 +359,11 @@ public class Pathfinding : MonoBehaviour
         return GetPathNodeOnGridPosition(gridPos.x, gridPos.y).GetIsWalkable();
     }
 
+    public void SetGridPositionWalkable(GridPosition gridPos, bool isWalkableVal)
+    {
+        GetPathNodeOnGridPosition(gridPos.x, gridPos.y).SetIsWalkable(isWalkableVal);
+    }
+
     public bool HasAPath(GridPosition a, GridPosition b)
     {
         return FindAPath(a, b, out int pathDistance) != null;
