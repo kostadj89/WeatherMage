@@ -3,72 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+ 
 
-//the structure which keeps data about grid tile location
-public struct GridPosition : IEquatable<GridPosition>
-{
-    public int x;
-    public int y;
-
-    public GridPosition(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-
-    public override bool Equals(object obj)
-    {
-        return obj is GridPosition position &&
-               x == position.x &&
-               y == position.y;
-    }
-
-    public bool Equals(GridPosition other)
-    {
-        return this == other;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(x, y);
-    }
-
-    public override string ToString()
-    {
-        return "(X:"+x+",Y:"+y +")";
-    }
-
-    public static bool operator == (GridPosition v, GridPosition u)
-    { 
-        return (v.x == u.x) && (v.y == u.y); 
-    }
-
-    public static bool operator !=(GridPosition v, GridPosition u)
-    {
-        return !(v == u); 
-    }
-
-    public static GridPosition operator +(GridPosition v, GridPosition u)
-    {
-        return new GridPosition(v.x + u.x,v.y+u.y);
-    }
-
-    public static GridPosition operator -(GridPosition v, GridPosition u)
-    {
-        return new GridPosition(v.x - u.x, v.y - u.y);
-    }
-}
 
 //each grid tile is determined by the TGridObject, and grid position; grid obj will hold the info about gridPosition
-public class GridSystem<TGridObject>
-{ 
+public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
+{
+    private const float VERTICAL_OFFSET = 0.75f;
     private int width, height;
     private float cellSize;
     private float cellOffset = 0.2f;
     private TGridObject[,] gridObjectArray;
 
-    //Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject delegate which accepts arguments of type GridSystem<TGridObject>, GridPosition and returns type TGridObject
-    public GridSystem(int w,int h, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
+    //Func<GridSystemHex<TGridObject>, GridPosition, TGridObject> createGridObject delegate which accepts arguments of type GridSystemHex<TGridObject>, GridPosition and returns type TGridObject
+    public GridSystemHex(int w,int h, float cellSize, Func<GridSystemHex<TGridObject>, GridPosition, TGridObject> createGridObject)
     { 
         this.width = w;
         this.height = h;
@@ -93,8 +41,15 @@ public class GridSystem<TGridObject>
 
     public Vector3 GetWorldFromGridPosition(GridPosition gridPosition)
     {
-        return new Vector3(gridPosition.x, 0, gridPosition.y) * cellSize;
+        return new Vector3(gridPosition.x, 0, 0) * cellSize +
+            new Vector3(0, 0, gridPosition.y) * cellSize * VERTICAL_OFFSET +
+            GetGridRowOffset(gridPosition);
         //return GetWorldPositionFromCoordinates(gridPosition.x, gridPosition.y);
+    }
+
+    private Vector3 GetGridRowOffset(GridPosition gridPosition)
+    {
+        return ((gridPosition.y % 2 == 1) ? new Vector3(1, 0, 0) * cellSize * 0.5f : Vector3.zero);
     }
 
     public GridPosition GetGridPosFromVector(Vector3 position)

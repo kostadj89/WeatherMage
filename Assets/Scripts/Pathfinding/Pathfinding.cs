@@ -15,7 +15,7 @@ public class Pathfinding : MonoBehaviour
     private int height;
     private float cellSize;
 
-    private GridSystem<PathNode> gridSystem;
+    private GridSystemSquare<PathNode> gridSystem;
 
     [SerializeField]
     private Transform gridDebugObject;
@@ -305,7 +305,7 @@ public class Pathfinding : MonoBehaviour
         this.height = height;
         this.cellSize = cellSize;
 
-        gridSystem = new GridSystem<PathNode>(width, height, cellSize, (GridSystem<PathNode> GridSystem, GridPosition gp) => new PathNode(gp));
+        gridSystem = new GridSystemSquare<PathNode>(width, height, cellSize, (GridSystemSquare<PathNode> GridSystem, GridPosition gp) => new PathNode(gp));
         
         
         //gridSystem.CreateDebugObjects(gridDebugObject);

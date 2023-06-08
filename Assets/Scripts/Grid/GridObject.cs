@@ -8,7 +8,7 @@ using UnityEngine;
 //holds logic if the grid tile is occupied or not, and references and methods for getting occupying units, destructibles as well as interactibles
 public class GridObject
 {
-    private GridSystem<GridObject> gridSystem;
+    private IGridSystem<GridObject> gridSystem;
     private GridPosition gridCellPosition;
     private List<ICanTakeDamage> damagableObjectsAtGridObject;
     private List<IInteractible> interactibles;
@@ -17,7 +17,7 @@ public class GridObject
     {
         this.gridCellPosition = gridCell;
     }
-    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell)
+    public GridObject(IGridSystem<GridObject> gridSystem, GridPosition gridCell)
     {
         this.gridSystem = gridSystem;
         this.gridCellPosition = gridCell;
@@ -25,7 +25,7 @@ public class GridObject
         this.interactibles = new List<IInteractible>();
     }
 
-    public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridCell, List<ICanTakeDamage> unitsAtGridObject) : this(gridSystem, gridCell)
+    public GridObject(GridSystemSquare<GridObject> gridSystem, GridPosition gridCell, List<ICanTakeDamage> unitsAtGridObject) : this(gridSystem, gridCell)
     {
         if (unitsAtGridObject == null)
         {

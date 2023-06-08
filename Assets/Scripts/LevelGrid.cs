@@ -19,7 +19,9 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int height = 10;
     [SerializeField] private float cellSize = 2f;
 
-    private GridSystem<GridObject> gridSystem;
+    private IGridSystem<GridObject> gridSystem;
+    [SerializeField]
+    private bool isHex;
 
     private void Awake()
     {
@@ -32,7 +34,18 @@ public class LevelGrid : MonoBehaviour
 
         Instance = this;
 
-        gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> gs,GridPosition gp) => new GridObject(gs, gp)); 
+        if (isHex)
+        {
+            //Use hex
+            gridSystem = new GridSystemHex<GridObject>(width, height, cellSize, (GridSystemHex<GridObject> gs, GridPosition gp) => new GridObject(gs, gp));
+        }
+        else
+        {
+            //Use square
+            gridSystem = new GridSystemSquare<GridObject>(width, height, cellSize, (GridSystemSquare<GridObject> gs, GridPosition gp) => new GridObject(gs, gp));
+        }
+        
+        
         //gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
     }
     // Start is called before the first frame update

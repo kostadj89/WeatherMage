@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+//this class handles visualation of the grid system
 public class GridSystemVisual : MonoBehaviour
 {
     [Serializable]
@@ -46,6 +47,20 @@ public class GridSystemVisual : MonoBehaviour
 
         UnitActionSystem.Instance.OnBusyChanged += OnBusyChanged_GridSystemVisual;
         LevelGrid.Instance.OnAnyUnitMoved += OnAnyUnitMoved_GridSystemVisual;
+
+        UpdateGridVisuals();
+
+        //Show all grid pos
+        int gridWidth = LevelGrid.Instance.GetGridWidth();
+        int gridHeight = LevelGrid.Instance.GetGridHeight();
+
+        for (int x = 0; x < gridWidth; x++)
+        {
+            for (int z = 0; z < gridHeight; z++)
+            {
+                gridSystemVisualSingles[x, z].Show(GetGridVisualTypeMaterial(GridVisualType.Green));
+            }
+        }
     }
 
     private void OnBusyChanged_GridSystemVisual(object sender, bool hideVisuals)
@@ -98,6 +113,9 @@ public class GridSystemVisual : MonoBehaviour
             {
                 case MoveAction moveAction:
                     actionGridTypeVisual = GridVisualType.Purple;
+                    break;
+                case InteractAction interactAction:
+                    actionGridTypeVisual = GridVisualType.Green;
                     break;
                 case SpinAction spinAction:
                     actionGridTypeVisual = GridVisualType.Blue;
