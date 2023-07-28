@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,24 @@ using UnityEngine;
 public class GridSystemVisualSingle : MonoBehaviour
 {
     [SerializeField] MeshRenderer meshRenderer;
+    [SerializeField] GameObject selectedTileVisual;
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (selectedTileVisual!=null)
+        {
+            HideSelected();
+        }
+    }
+
+    public void HideSelected()
+    {
+        selectedTileVisual.SetActive(false);
+    }
+
+    public void ShowSelected()
+    { 
+        selectedTileVisual.SetActive(true);
     }
 
     // Update is called once per frame

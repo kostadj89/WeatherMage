@@ -27,7 +27,7 @@ public class MoveAction : BaseAction//, IAction
         //targetPosition = transform.position;
 
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +73,7 @@ public class MoveAction : BaseAction//, IAction
     {
         OnStartMoving?.Invoke(this, EventArgs.Empty);
 
-        this.targetPositionPath = (Pathfinding.Instance.FindAPath(unit.GetGridPosition(), targetPosition, out int pathDistance)
+        this.targetPositionPath = (PathfindingSquareGrid.Instance.FindAPath(unit.GetGridPosition(), targetPosition, out int pathDistance)
             .Select(x=> LevelGrid.Instance.GetWorldFromGridPosition(x))).ToList();
 
         this.currentPositionIndex= 0;
@@ -90,27 +90,20 @@ public class MoveAction : BaseAction//, IAction
 
         GridPosition testGridPos;
 
-        for (int i = -maxMoveRadius; i <= maxMoveRadius; i++)
+        List<GridPosition> unvalidatedGridPositions = LevelGrid.Instance.GetAllCellsInTheRange(unitGridPosition, maxMoveRadius);
+
+        foreach (GridPosition item in unvalidatedGridPositions)
         {
-            for (int j = -maxMoveRadius; j <= maxMoveRadius; j++)
+            if (!LevelGrid.Instance.IsValidGridPosition(item)
+                   || LevelGrid.Instance.IsGridPositionOccupied(item)
+                   || !PathfindingSquareGrid.Instance.IsGridPositionWalkable(item)
+                   || !PathfindingSquareGrid.Instance.HasAPath(unitGridPosition, item)
+                   || PathfindingSquareGrid.Instance.GetPathDistanceCost(unitGridPosition, item) > maxMoveRadius * 15)
             {
-                offset = new GridPosition(i, j);
-                testGridPos = offset + unitGridPosition;
-                
-
-                //first check if grid with that coordinaes exist, then if it's occupied, then if it's walkable, then if it's reachable
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPos) 
-                    || LevelGrid.Instance.IsGridPositionOccupied(testGridPos) 
-                    || !Pathfinding.Instance.IsGridPositionWalkable(testGridPos)
-                    || !Pathfinding.Instance.HasAPath(unitGridPosition,testGridPos)
-                    || Pathfinding.Instance.GetPathDistanceCost(unitGridPosition,testGridPos) > maxMoveRadius*10)
-                {
-                    continue;
-                } 
-
-                validGridPositions.Add(testGridPos);
-                //Debug.Log(testGridPos);
+                continue;
             }
+
+            validGridPositions.Add(item);
         }
 
         return validGridPositions;

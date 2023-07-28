@@ -77,7 +77,7 @@ public class GridSystemSquare<TGridObject> : IGridSystem<TGridObject>
 
     public bool IsGridPositionOccupied(GridPosition gridPosition)
     {
-        Debug.Log(gridObjectArray[gridPosition.x, gridPosition.y]);
+        //Debug.Log(gridObjectArray[gridPosition.x, gridPosition.y]);
         return (gridObjectArray[gridPosition.x,gridPosition.y] as GridObject).IsOccupied();
     }
 
@@ -89,6 +89,34 @@ public class GridSystemSquare<TGridObject> : IGridSystem<TGridObject>
     public int GetHeight() 
     {
         return height;
+    }
+
+    public List<GridPosition> GetAllCellsInTheRange(GridPosition targetPosition, int range)
+    {
+        List<GridPosition> gridPositions = new List<GridPosition>();
+
+        GridPosition targetGridPosition = targetPosition;
+        GridPosition tempGridPosition;
+
+        for (int i = targetGridPosition.x - 1; i <= targetGridPosition.x + 1; i++)
+        {
+            for (int j = targetGridPosition.y - 1; j <= targetGridPosition.y + 1; j++)
+            {
+                tempGridPosition = new GridPosition(i, j);
+
+                //if (tempGridPosition == targetGridPosition)
+                //{
+                //    continue;
+                //}
+
+                if (IsValidGridPosition(tempGridPosition))
+                {
+                    gridPositions.Add(tempGridPosition);
+                }
+            }
+        }
+
+        return gridPositions;
     }
 }
 

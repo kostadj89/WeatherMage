@@ -66,7 +66,7 @@ public class AreaShootAction : BaseAction
 
     private void OnProjectileDestroyed_ShootAction(object sender, OnProjectileDestroyedArgs e)
     {
-        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(e.targetPosition, explosionAreaRadius);
+        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(LevelGrid.Instance.GetGridPosition(e.targetPosition), explosionAreaRadius);
         List<ICanTakeDamage> listOfAdjacent = LevelGrid.Instance.GetAllPotentionalTargetsFromTheCells(gridPositions);
 
         foreach (ICanTakeDamage adjacentTarget in listOfAdjacent)
@@ -84,7 +84,8 @@ public class AreaShootAction : BaseAction
 
     public override List<GridPosition> GetAllValidGridPositionsForAction()
     {
-        return GetAllValidGridPositionsForAction(unit.GetGridPosition());
+        return LevelGrid.Instance.GetAllCellsInTheRange(unit.GetGridPosition(), maxShootRadius);
+        //return GetAllValidGridPositionsForAction(unit.GetGridPosition());
     }
     private  List<GridPosition> GetAllValidGridPositionsForAction(GridPosition originGridPosition)
     {
@@ -268,14 +269,15 @@ public class AreaShootAction : BaseAction
     }
     public int GetNumberOfTargetsFromPosition(GridPosition gridPosition)
     {
-        return GetAllValidGridPositionsForAction(gridPosition).Count;
+        return GetAllValidGridPositionsForAction().Count;
+        //return GetAllValidGridPositionsForAction(gridPosition).Count;
     }
 
     #region AI
 
     public override ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos)
     {
-        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(LevelGrid.Instance.GetWorldFromGridPosition(gridPos), explosionAreaRadius);
+        List<GridPosition> gridPositions = LevelGrid.Instance.GetAllCellsInTheRange(gridPos, explosionAreaRadius);
         List<ICanTakeDamage> listOfAdjacent = LevelGrid.Instance.GetAllPotentionalTargetsFromTheCells(gridPositions);
 
         int score = 0;

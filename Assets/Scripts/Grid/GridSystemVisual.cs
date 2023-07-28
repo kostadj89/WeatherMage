@@ -25,6 +25,7 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterials;
 
     private GridSystemVisualSingle[,] gridSystemVisualSingles;
+    private GridSystemVisualSingle lastSelected;
     // Start is called before the first frame update
     void Start()
     {
@@ -81,7 +82,23 @@ public class GridSystemVisual : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (lastSelected!=null)
+        {
+            lastSelected.HideSelected();
+        }
         //UpdateGridVisuals();
+        Vector3 mouseWorldPos = MouseWorld.GetPosition();
+        GridPosition currGridPos = LevelGrid.Instance.GetGridPosition(mouseWorldPos);
+
+        if (LevelGrid.Instance.IsValidGridPosition(currGridPos))
+        {
+            lastSelected = gridSystemVisualSingles[currGridPos.x, currGridPos.y];
+        }
+
+        if (lastSelected != null)
+        {
+            lastSelected.ShowSelected();
+        }
     }
 
     public void HideAllGridPositions()
@@ -123,17 +140,17 @@ public class GridSystemVisual : MonoBehaviour
                 case ShootAction shootAction:
                     actionGridTypeVisual = GridVisualType.Red;
                     Unit unit = shootAction.GetUnit();
-                    ShowGridPositionRangeCircural(unit.GetGridPosition(), shootAction.GetRadius(), GridVisualType.Purple);
+                    //ShowGridPositionRangeCircural(unit.GetGridPosition(), shootAction.GetRadius(), GridVisualType.Purple);
                     break;
                 case AreaShootAction areaShootAction:
                     actionGridTypeVisual = GridVisualType.Red;
                     Unit unit_Area = areaShootAction.GetUnit();
-                    ShowGridPositionRangeCircural(unit_Area.GetGridPosition(), areaShootAction.GetRadius(), GridVisualType.Purple);
+                    //ShowGridPositionRangeCircural(unit_Area.GetGridPosition(), areaShootAction.GetRadius(), GridVisualType.Purple);
                     break;
                 case MeleeAction meleeAction:
                     actionGridTypeVisual = GridVisualType.Red;
                     Unit unitMelee = meleeAction.GetUnit();
-                    ShowGridPositionRangeSquare(unitMelee.GetGridPosition(), meleeAction.GetRadius(), GridVisualType.Purple);
+                    //ShowGridPositionRangeSquare(unitMelee.GetGridPosition(), meleeAction.GetRadius(), GridVisualType.Purple);
                     break;
                 default:
                     actionGridTypeVisual = GridVisualType.Purple;

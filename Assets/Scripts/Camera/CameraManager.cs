@@ -92,7 +92,7 @@ public class CameraManager : MonoBehaviour
     {
         Vector3 midPoint = (targetUnit.GetWorldPosition() + shooter.GetWorldPosition())/2f;
 
-        Debug.Log(midPoint);
+        //Debug.Log(midPoint);
 
         float maxDistance = Mathf.Max(Vector3.Distance(midPoint, shooter.transform.position), Vector3.Distance(midPoint, targetUnit.transform.position));
 

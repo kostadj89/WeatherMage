@@ -50,44 +50,40 @@ public class MeleeAction : BaseAction
     public override List<GridPosition> GetAllValidGridPositionsForAction()
     {
         List<GridPosition> validGridPositions = new List<GridPosition>();
+        List<GridPosition> unvalidatedGridPositions = new List<GridPosition>();
 
         GridPosition originGridPosition = unit.GetGridPosition();
         GridPosition offsetGridPosition;
 
-        GridPosition testGridPos;
+        //GridPosition testGridPos;
 
-        for (int i = -maxSwordRadius; i <= maxSwordRadius; i++)
+        unvalidatedGridPositions = LevelGrid.Instance.GetAllCellsInTheRange(originGridPosition, 1);
+        foreach (GridPosition testGridPos in unvalidatedGridPositions)
         {
-            for (int j = -maxSwordRadius; j <= maxSwordRadius; j++)
+            // check to see if the cell is out of grid bounds, if yes ignore
+            if (!LevelGrid.Instance.IsValidGridPosition(testGridPos))
             {
-                offsetGridPosition = new GridPosition(i, j);
-                testGridPos = offsetGridPosition + originGridPosition;
-
-                // check to see if the cell is out of grid bounds, if yes ignore
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPos))
-                {
-                    continue;
-                }
-
-                //check to see if the cell has any unit or destructible on it, if no ignore
-                if (!LevelGrid.Instance.IsGridPositionOccupied(testGridPos))
-                {
-                    continue;
-                }
-
-                //check to see if the unit is on the same team as the playing unit, if yes ignore
-                ICanTakeDamage targetUnitOrDestructible = LevelGrid.Instance.GetUnitOrDestructibleAtGridPosition(testGridPos);
-
-                if (targetUnitOrDestructible.IsOnSameTeam(unit.IsEnemy()))
-                {
-                    continue;
-                }
-
-
-                //in the end, we got an opossing unit inside of the range on the valid grid cell, and we add that unit's grid cell
-                validGridPositions.Add(testGridPos);
-                //Debug.Log(testGridPos);
+                continue;
             }
+
+            //check to see if the cell has any unit or destructible on it, if no ignore
+            if (!LevelGrid.Instance.IsGridPositionOccupied(testGridPos))
+            {
+                continue;
+            }
+
+            //check to see if the unit is on the same team as the playing unit, if yes ignore
+            ICanTakeDamage targetUnitOrDestructible = LevelGrid.Instance.GetUnitOrDestructibleAtGridPosition(testGridPos);
+
+            if (targetUnitOrDestructible.IsOnSameTeam(unit.IsEnemy()))
+            {
+                continue;
+            }
+
+
+            //in the end, we got an opossing unit inside of the range on the valid grid cell, and we add that unit's grid cell
+            validGridPositions.Add(testGridPos);
+            //Debug.Log(testGridPos);
         }
 
         return validGridPositions;

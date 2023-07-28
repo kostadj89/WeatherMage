@@ -51,7 +51,7 @@ public class LevelGrid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Pathfinding.Instance.Setup(width, height, cellSize);
+        PathfindingSquareGrid.Instance.Setup(width, height, cellSize);
     }
 
     // Update is called once per frame
@@ -129,6 +129,8 @@ public class LevelGrid : MonoBehaviour
     public int GetGridWidth() => gridSystem.GetWidth();
     public int GetGridHeight() => gridSystem.GetHeight();
 
+    public bool GetIsHexGrid() => isHex;
+
     public void UnitMovedGridPosition(Unit unit,GridPosition fromPos,GridPosition toPos)
     {         
         ClearUnitOrDestructibleAtGridPosition(fromPos, unit);
@@ -136,32 +138,9 @@ public class LevelGrid : MonoBehaviour
         OnAnyUnitMoved?.Invoke(this, EventArgs.Empty);
     }
 
-    internal List<GridPosition> GetAllCellsInTheRange(Vector3 targetPosition, int range)
+    internal List<GridPosition> GetAllCellsInTheRange(GridPosition targetPosition, int range)
     {
-        List<GridPosition> gridPositions= new List<GridPosition>();
-
-        GridPosition targetGridPosition = GetGridPosition(targetPosition);
-        GridPosition tempGridPosition;
-
-        for (int i = targetGridPosition.x - 1; i <= targetGridPosition.x +1; i++)
-        {
-            for (int j = targetGridPosition.y - 1; j <= targetGridPosition.y + 1; j++)
-            {
-                tempGridPosition = new GridPosition(i, j);
-
-                //if (tempGridPosition == targetGridPosition)
-                //{
-                //    continue;
-                //}
-
-                if (gridSystem.IsValidGridPosition(tempGridPosition))
-                {
-                    gridPositions.Add(tempGridPosition);
-                }
-            }
-        }
-
-        return gridPositions;
+        return gridSystem.GetAllCellsInTheRange(targetPosition,range);
     }
 
     internal List<ICanTakeDamage> GetAllPotentionalTargetsFromTheCells(List<GridPosition> gridPositions)

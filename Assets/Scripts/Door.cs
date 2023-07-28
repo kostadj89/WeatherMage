@@ -79,13 +79,13 @@ public class Door : MonoBehaviour,IInteractible
     {
         isOpen= true;
         doorAnimator.SetBool("IsOpen", isOpen);
-        Pathfinding.Instance.SetGridPositionWalkable(doorGridPos, true);
+        PathfindingSquareGrid.Instance.SetGridPositionWalkable(doorGridPos, true);
     }
 
     private void CloseDoor()
     {
         isOpen = false;
         doorAnimator.SetBool("IsOpen", isOpen);
-        Pathfinding.Instance.SetGridPositionWalkable(doorGridPos, false);
+        PathfindingSquareGrid.Instance.SetGridPositionWalkable(doorGridPos, false);
     }
 }

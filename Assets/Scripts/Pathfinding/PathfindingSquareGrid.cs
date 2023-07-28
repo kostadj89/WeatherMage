@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Pathfinding : MonoBehaviour
+public class PathfindingSquareGrid : MonoBehaviour
 {
     private const int MAX_ITERATIONS = 1000;
     private const int MOVE_STRAIGHT_COST = 10;
@@ -22,7 +22,7 @@ public class Pathfinding : MonoBehaviour
     [SerializeField]
     private LayerMask obstaclesLayerMask;
 
-    public static Pathfinding Instance;
+    public static PathfindingSquareGrid Instance;
 
     private void Awake()
     {

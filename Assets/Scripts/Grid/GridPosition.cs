@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 //the structure which keeps data about grid tile location
 public struct GridPosition : IEquatable<GridPosition>
 {
+    //y are rows, x are columns :3
     public int x;
     public int y;
 
