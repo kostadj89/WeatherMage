@@ -132,23 +132,23 @@ public class GridSystemVisual : MonoBehaviour
                     actionGridTypeVisual = GridVisualType.Purple;
                     break;
                 case InteractAction interactAction:
-                    actionGridTypeVisual = GridVisualType.Green;
+                    actionGridTypeVisual = GridVisualType.Purple;
                     break;
                 case SpinAction spinAction:
-                    actionGridTypeVisual = GridVisualType.Blue;
+                    actionGridTypeVisual = GridVisualType.Purple;
                     break;
                 case ShootAction shootAction:
-                    actionGridTypeVisual = GridVisualType.Red;
+                    actionGridTypeVisual = GridVisualType.Purple;
                     Unit unit = shootAction.GetUnit();
                     //ShowGridPositionRangeCircural(unit.GetGridPosition(), shootAction.GetRadius(), GridVisualType.Purple);
                     break;
                 case AreaShootAction areaShootAction:
-                    actionGridTypeVisual = GridVisualType.Red;
+                    actionGridTypeVisual = GridVisualType.Purple;
                     Unit unit_Area = areaShootAction.GetUnit();
                     //ShowGridPositionRangeCircural(unit_Area.GetGridPosition(), areaShootAction.GetRadius(), GridVisualType.Purple);
                     break;
                 case MeleeAction meleeAction:
-                    actionGridTypeVisual = GridVisualType.Red;
+                    actionGridTypeVisual = GridVisualType.Purple;
                     Unit unitMelee = meleeAction.GetUnit();
                     //ShowGridPositionRangeSquare(unitMelee.GetGridPosition(), meleeAction.GetRadius(), GridVisualType.Purple);
                     break;
