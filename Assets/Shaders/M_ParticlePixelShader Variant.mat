@@ -34,6 +34,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DstBlend: 10
+    - _QueueControl: 0
+    - _SrcBlend: 5
     - _UVMulitplierFloorParam: 8
     m_Colors:
     - _Color: {r: 16, g: 16, b: 16, a: 1}
