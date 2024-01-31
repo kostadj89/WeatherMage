@@ -14,34 +14,19 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
     private int width, height;
     private float cellSize;
     private float cellOffset = 0.2f;
+    //so each grid system will have it's floor
+    private int floor;
+    private float floorHeight;
     private TGridObject[,] gridObjectArray;
 
-    private static readonly GridPosition[] DirectionsEven = new GridPosition[]
-{
-        new GridPosition(1, 0),       // Right
-        new GridPosition(-1, -1),      // Bottom-left
-        new GridPosition(0, -1),      // Bottom
-        new GridPosition(-1, 0),      // Left
-        new GridPosition(-1, 1),      // Top-left
-        new GridPosition(0, 1)        // Top
-};
-
-    private static readonly GridPosition[] DirectionsOdd = new GridPosition[]
-{
-        new GridPosition(1, 0),       // Right
-        new GridPosition(1, -1),      // Bottom-right
-        new GridPosition(0, -1),      // Bottom
-        new GridPosition(-1, 0),      // Left
-        new GridPosition(1, 1),      // Top-right
-        new GridPosition(0, 1)        // Top
-};
-
     //Func<GridSystemHex<TGridObject>, GridPosition, TGridObject> createGridObject delegate which accepts arguments of type GridSystemHex<TGridObject>, GridPosition and returns type TGridObject
-    public GridSystemHex(int w,int h, float cellSize, Func<GridSystemHex<TGridObject>, GridPosition, TGridObject> createGridObject)
+    public GridSystemHex(int w,int h, float cellSize, int floor,float floorHeight,Func<GridSystemHex<TGridObject>, GridPosition, TGridObject> createGridObject)
     { 
         this.width = w;
         this.height = h;
         this.cellSize = cellSize;
+        this.floor = floor;
+        this.floorHeight = floorHeight;
 
         gridObjectArray = new TGridObject[w,h];
         for (int i = 0 ; i < width; i++)
@@ -49,7 +34,7 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
             for (int j = 0; j < height; j++)
             {
                 //Debug.DrawLine(GetWorldPositionFromCoordinates(i, j), GetWorldPositionFromCoordinates(i, j) + Vector3.right * cellOffset, Color.white, 9999);
-                GridPosition gridPosition = new GridPosition(i,j);
+                GridPosition gridPosition = new GridPosition(i,j, floor);
                 gridObjectArray[i,j] = createGridObject(this, gridPosition);
             }
         }
@@ -64,7 +49,7 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
     {
         return new Vector3(gridPosition.x, 0, 0) * cellSize +
             new Vector3(0, 0, gridPosition.y) * cellSize * VERTICAL_OFFSET_MULTIPLIER +
-            GetGridRowOffset(gridPosition);
+            GetGridRowOffset(gridPosition) + new Vector3(0,gridPosition.floor,0)*floorHeight;
         //return GetWorldPositionFromCoordinates(gridPosition.x, gridPosition.y);
     }
 
@@ -80,7 +65,8 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
 
     private GridPosition ClosesetGridPosition(Vector3 position)
     {
-        GridPosition roughlyEstimatedGridPos = new GridPosition(Mathf.RoundToInt(position.x / cellSize), Mathf.RoundToInt(position.z / cellSize / VERTICAL_OFFSET_MULTIPLIER));
+        //added only on the same floor
+        GridPosition roughlyEstimatedGridPos = new GridPosition(Mathf.RoundToInt(position.x / cellSize), Mathf.RoundToInt(position.z / cellSize / VERTICAL_OFFSET_MULTIPLIER), floor);
 
         List<GridPosition> neighbourGridPositions = GetNeighbourGridPositions(roughlyEstimatedGridPos);
 
@@ -103,14 +89,14 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
 
         List<GridPosition> neighbourGridPositions = new List<GridPosition>()
         {
-            targetGridPos + new GridPosition(-1,0),
-            targetGridPos + new GridPosition(1,0),
+            targetGridPos + new GridPosition(-1,0,0),
+            targetGridPos + new GridPosition(1,0, 0),
 
-            targetGridPos + new GridPosition(0,1),
-            targetGridPos + new GridPosition(0,-1),
+            targetGridPos + new GridPosition(0,1, 0),
+            targetGridPos + new GridPosition(0,-1, 0),
 
-            targetGridPos + new GridPosition(isOddRow? +1:-1,1),
-            targetGridPos + new GridPosition(isOddRow? +1:-1,-1)
+            targetGridPos + new GridPosition(isOddRow? +1:-1,1, 0),
+            targetGridPos + new GridPosition(isOddRow? +1:-1,-1, 0)
         };
 
         List<GridPosition> positionsToRemove = new List<GridPosition>();
@@ -139,7 +125,7 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
         {
             for (int j = 0; j < height; j++)
             {
-                GridPosition gridPosition= new GridPosition(i,j);
+                GridPosition gridPosition= new GridPosition(i,j, floor);
                 debugObjectTransform = GameObject.Instantiate(debugPrefab, GetWorldFromGridPosition(gridPosition), Quaternion.identity);
                 //debugPrefab.GetComponentInChildren<TextMeshPro>().text = $"{i}, {j}";
                 GridDebugObject gridDebugObject = debugObjectTransform.GetComponent<GridDebugObject>();
@@ -155,7 +141,7 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
 
     public bool IsValidGridPosition(GridPosition gridPosition)
     {
-        return gridPosition.x < width && gridPosition.y < height && gridPosition.x >= 0 && gridPosition.y >= 0;
+        return gridPosition.x < width && gridPosition.y < height && gridPosition.x >= 0 && gridPosition.y >= 0 && gridPosition.floor == floor;
     }
 
     public bool IsGridPositionOccupied(GridPosition gridPosition)
@@ -185,7 +171,7 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
         for (int i = centerHex.x - range; i <= centerHex.x+range; i++)
         {
             //we fix the row, since i've fucked up by switching coordinates and y represent row
-            tempGridPosition = new GridPosition(i, centerHex.y);
+            tempGridPosition = new GridPosition(i, centerHex.y, floor);
 
             if(LevelGrid.Instance.IsValidGridPosition(tempGridPosition)) gridPositionsInTheArea.Add(tempGridPosition);
         }
@@ -210,12 +196,12 @@ public class GridSystemHex<TGridObject> : IGridSystem<TGridObject>
             {
                 
 
-                tempGridPosition = new GridPosition(leftMostIndex + counter, centerHex.y + i);
+                tempGridPosition = new GridPosition(leftMostIndex + counter, centerHex.y + i, floor);
                 if (LevelGrid.Instance.IsValidGridPosition(tempGridPosition)) gridPositionsInTheArea.Add(tempGridPosition);
 
                 if (centerHex.y-i>=0)
                 {
-                    tempGridPosition = new GridPosition(leftMostIndex + counter, centerHex.y - i);
+                    tempGridPosition = new GridPosition(leftMostIndex + counter, centerHex.y - i, floor);
                     if (LevelGrid.Instance.IsValidGridPosition(tempGridPosition)) gridPositionsInTheArea.Add(tempGridPosition);
                 }                
 

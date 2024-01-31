@@ -45,6 +45,7 @@ public class UnitActionSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(LevelGrid.Instance.GetGridPosition(MouseWorld.GetPosition()));
         //if any other action is running do nothing
         if (isBusy) { return; }
 

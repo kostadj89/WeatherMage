@@ -30,14 +30,18 @@ public class GridSystemVisual : MonoBehaviour
     void Start()
     {
         gridSystemVisualSingles = new GridSystemVisualSingle[LevelGrid.Instance.GetGridWidth(), LevelGrid.Instance.GetGridHeight()];
-
+        int numOfFloors = LevelGrid.Instance.GetNumberOfFloors();
         for (int i = 0; i < LevelGrid.Instance.GetGridWidth(); i++)
         {
             for (int j = 0; j < LevelGrid.Instance.GetGridHeight(); j++)
             {
-                GridPosition gridPos= new GridPosition(i, j);                
+                //for (int k = 0; k < numOfFloors; k++) later
+                //{
+                    GridPosition gridPos = new GridPosition(i, j,0);
 
-                gridSystemVisualSingles[i,j] = Instantiate(gridSystemVisualSinglePrefab, LevelGrid.Instance.GetWorldFromGridPosition(gridPos), Quaternion.identity).GetComponent<GridSystemVisualSingle>();
+                    gridSystemVisualSingles[i, j] = Instantiate(gridSystemVisualSinglePrefab, LevelGrid.Instance.GetWorldFromGridPosition(gridPos), Quaternion.identity).GetComponent<GridSystemVisualSingle>();
+                //}
+                
             }
         }
 
@@ -184,7 +188,8 @@ public class GridSystemVisual : MonoBehaviour
         {
             for (int j = -range; j <= range; j++)
             {
-                GridPosition testGridPosition = new GridPosition(i,j) + gridPosition;
+                //change later
+                GridPosition testGridPosition = new GridPosition(i,j, 0) + gridPosition;
 
                 if(!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
                 {
@@ -213,7 +218,8 @@ public class GridSystemVisual : MonoBehaviour
         {
             for (int j = -range; j <= range; j++)
             {
-                GridPosition testGridPosition = new GridPosition(i, j) + gridPosition;
+                //Change later
+                GridPosition testGridPosition = new GridPosition(i, j, 0) + gridPosition;
 
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
                 {

@@ -66,7 +66,8 @@ public class PathfindingSquareGrid : MonoBehaviour
         {
             for (int y = 0; y < gridSystem.GetHeight(); y++)
             {
-                GridPosition currGridPos = new GridPosition(x, y);
+                //TODO: change later to consider different floors
+                GridPosition currGridPos = new GridPosition(x, y, 0);
                 PathNode currPathNode = gridSystem.GetGridObjectFromGridPos(currGridPos);
 
                 //for some reason set path cost to max int
@@ -305,7 +306,8 @@ public class PathfindingSquareGrid : MonoBehaviour
         this.height = height;
         this.cellSize = cellSize;
 
-        gridSystem = new GridSystemSquare<PathNode>(width, height, cellSize, (GridSystemSquare<PathNode> GridSystem, GridPosition gp) => new PathNode(gp));
+        //TODO: change later to consider different floors
+        gridSystem = new GridSystemSquare<PathNode>(width, height, cellSize, 0, LevelGrid.FLOOR_HEIGHT, (GridSystemSquare<PathNode> GridSystem, GridPosition gp) => new PathNode(gp));
         
         
         //gridSystem.CreateDebugObjects(gridDebugObject);
@@ -318,7 +320,8 @@ public class PathfindingSquareGrid : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-                GridPosition tempGridPos = new GridPosition(i, j);
+                //TODO: change later to consider different floors
+                GridPosition tempGridPos = new GridPosition(i, j, 0);
                 Vector3 tempGridPosWorldPos = LevelGrid.Instance.GetWorldFromGridPosition(tempGridPos);
 
                 float raycastOffsetDistance = 5f;
@@ -335,7 +338,8 @@ public class PathfindingSquareGrid : MonoBehaviour
 
     private void AddPathNodeIfValidToList(List<PathNode> neighboursList, int x, int y, List<PathNode> closedNodes)
     {
-        GridPosition gridPos = new GridPosition(x, y);
+        //TODO: change later to consider different floors
+        GridPosition gridPos = new GridPosition(x, y, 0);
         if(gridSystem.IsValidGridPosition(gridPos) && gridSystem.GetGridObjectFromGridPos(gridPos).GetIsWalkable())
         {
             if (!LevelGrid.Instance.IsGridPositionOccupied(gridPos))
@@ -351,7 +355,8 @@ public class PathfindingSquareGrid : MonoBehaviour
 
     private PathNode GetPathNodeOnGridPosition(int x, int y)
     {
-        return gridSystem.GetGridObjectFromGridPos(new GridPosition(x, y));
+        //TODO: change later to consider different floors
+        return gridSystem.GetGridObjectFromGridPos(new GridPosition(x, y, 0));
     }
 
     public bool IsGridPositionWalkable(GridPosition gridPos)

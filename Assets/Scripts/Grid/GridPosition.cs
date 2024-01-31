@@ -10,18 +10,21 @@ public struct GridPosition : IEquatable<GridPosition>
     //y are rows, x are columns :3
     public int x;
     public int y;
+    public int floor;
 
-    public GridPosition(int x, int y)
+    public GridPosition(int x, int y, int floor)
     {
         this.x = x;
         this.y = y;
+        this.floor = floor;
     }
 
     public override bool Equals(object obj)
     {
         return obj is GridPosition position &&
                 x == position.x &&
-                y == position.y;
+                y == position.y && 
+                floor == position.floor;
     }
 
     public bool Equals(GridPosition other)
@@ -31,17 +34,17 @@ public struct GridPosition : IEquatable<GridPosition>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(x, y);
+        return HashCode.Combine(x, y, floor);
     }
 
     public override string ToString()
     {
-        return "(X:" + x + ",Y:" + y + ")";
+        return "(X:" + x + ", Y:" + y + ", Floor:" + floor + ")";
     }
 
     public static bool operator ==(GridPosition v, GridPosition u)
     {
-        return (v.x == u.x) && (v.y == u.y);
+        return (v.x == u.x) && (v.y == u.y) && (v.floor == u.floor);
     }
 
     public static bool operator !=(GridPosition v, GridPosition u)
@@ -51,11 +54,11 @@ public struct GridPosition : IEquatable<GridPosition>
 
     public static GridPosition operator +(GridPosition v, GridPosition u)
     {
-        return new GridPosition(v.x + u.x, v.y + u.y);
+        return new GridPosition(v.x + u.x, v.y + u.y, v.floor + u.floor);
     }
 
     public static GridPosition operator -(GridPosition v, GridPosition u)
     {
-        return new GridPosition(v.x - u.x, v.y - u.y);
+        return new GridPosition(v.x - u.x, v.y - u.y, v.floor - u.floor);
     }
 }

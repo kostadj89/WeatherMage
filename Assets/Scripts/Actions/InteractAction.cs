@@ -26,7 +26,7 @@ public class InteractAction : BaseAction
         {
             for (int j = -maxInteractRadius; j <= maxInteractRadius; j++)
             {
-                offsetGridPosition = new GridPosition(i, j);
+                offsetGridPosition = new GridPosition(i, j, 0);
                 testGridPos = offsetGridPosition + originGridPosition;
 
                 // check to see if the cell is out of grid bounds, if yes ignore

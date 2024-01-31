@@ -11,14 +11,20 @@ public class GridSystemSquare<TGridObject> : IGridSystem<TGridObject>
     private int width, height;
     private float cellSize;
     private float cellOffset = 0.2f;
+    //so each grid system will have it's floor
+    private int floor;
+    private float floorHeight;
     private TGridObject[,] gridObjectArray;
 
     //Func<GridSystemSquare<TGridObject>, GridPosition, TGridObject> createGridObject delegate which accepts arguments of type GridSystemSquare<TGridObject>, GridPosition and returns type TGridObject
-    public GridSystemSquare(int w,int h, float cellSize, Func<GridSystemSquare<TGridObject>, GridPosition, TGridObject> createGridObject)
+    public GridSystemSquare(int w,int h, float cellSize, int floor, float floorHeight, Func<GridSystemSquare<TGridObject>, GridPosition, TGridObject> createGridObject)
     { 
         this.width = w;
         this.height = h;
         this.cellSize = cellSize;
+
+        this.floor = floor;
+        this.floorHeight = floorHeight;
 
         gridObjectArray = new TGridObject[w,h];
         for (int i = 0 ; i < width; i++)
@@ -26,7 +32,7 @@ public class GridSystemSquare<TGridObject> : IGridSystem<TGridObject>
             for (int j = 0; j < height; j++)
             {
                 //Debug.DrawLine(GetWorldPositionFromCoordinates(i, j), GetWorldPositionFromCoordinates(i, j) + Vector3.right * cellOffset, Color.white, 9999);
-                GridPosition gridPosition = new GridPosition(i,j);
+                GridPosition gridPosition = new GridPosition(i,j,floor);
                 gridObjectArray[i,j] = createGridObject(this, gridPosition);
             }
         }
@@ -45,7 +51,7 @@ public class GridSystemSquare<TGridObject> : IGridSystem<TGridObject>
 
     public GridPosition GetGridPosFromVector(Vector3 position)
     {
-        return new GridPosition(Mathf.RoundToInt(position.x / cellSize), Mathf.RoundToInt(position.z / cellSize));
+        return new GridPosition(Mathf.RoundToInt(position.x / cellSize), Mathf.RoundToInt(position.z / cellSize),floor);
     }
 
     public void CreateDebugObjects(Transform debugPrefab)
@@ -56,7 +62,7 @@ public class GridSystemSquare<TGridObject> : IGridSystem<TGridObject>
         {
             for (int j = 0; j < height; j++)
             {
-                GridPosition gridPosition= new GridPosition(i,j);
+                GridPosition gridPosition= new GridPosition(i,j, floor);
                 debugObjectTransform = GameObject.Instantiate(debugPrefab, GetWorldFromGridPosition(gridPosition), Quaternion.identity);
                 //debugPrefab.GetComponentInChildren<TextMeshPro>().text = $"{i}, {j}";
                 GridDebugObject gridDebugObject = debugObjectTransform.GetComponent<GridDebugObject>();
@@ -102,7 +108,7 @@ public class GridSystemSquare<TGridObject> : IGridSystem<TGridObject>
         {
             for (int j = targetGridPosition.y - 1; j <= targetGridPosition.y + 1; j++)
             {
-                tempGridPosition = new GridPosition(i, j);
+                tempGridPosition = new GridPosition(i, j, targetGridPosition.floor);
 
                 //if (tempGridPosition == targetGridPosition)
                 //{

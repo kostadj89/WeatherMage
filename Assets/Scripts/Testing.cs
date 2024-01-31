@@ -15,7 +15,9 @@ public class Testing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        previousHoverOverGridPosition = new GridPosition(-100, -100);
+
+        //TODO: change later to consider different floors
+        previousHoverOverGridPosition = new GridPosition(-100, -100,-100);
     }
 
     // Update is called once per frame

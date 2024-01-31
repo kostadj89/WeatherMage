@@ -100,7 +100,7 @@ public class AreaShootAction : BaseAction
         {
             for (int j = -maxShootRadius; j <= maxShootRadius; j++)
             {
-                offsetGridPosition = new GridPosition(i, j);
+                offsetGridPosition = new GridPosition(i, j,0);
                 testGridPos = offsetGridPosition + originGridPosition;
 
                 // check to see if the cell is out of grid bounds, if yes ignore
