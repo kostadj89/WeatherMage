@@ -24,23 +24,27 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private Transform gridSystemVisualSinglePrefab;
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterials;
 
-    private GridSystemVisualSingle[,] gridSystemVisualSingles;
+    private GridSystemVisualSingle[,,] gridSystemVisualSingles;
     private GridSystemVisualSingle lastSelected;
     // Start is called before the first frame update
     void Start()
     {
-        gridSystemVisualSingles = new GridSystemVisualSingle[LevelGrid.Instance.GetGridWidth(), LevelGrid.Instance.GetGridHeight()];
+        int gridWidth = LevelGrid.Instance.GetGridWidth();
         int numOfFloors = LevelGrid.Instance.GetNumberOfFloors();
-        for (int i = 0; i < LevelGrid.Instance.GetGridWidth(); i++)
-        {
-            for (int j = 0; j < LevelGrid.Instance.GetGridHeight(); j++)
-            {
-                //for (int k = 0; k < numOfFloors; k++) later
-                //{
-                    GridPosition gridPos = new GridPosition(i, j,0);
+        int gridHeight = LevelGrid.Instance.GetGridHeight();
 
-                    gridSystemVisualSingles[i, j] = Instantiate(gridSystemVisualSinglePrefab, LevelGrid.Instance.GetWorldFromGridPosition(gridPos), Quaternion.identity).GetComponent<GridSystemVisualSingle>();
-                //}
+        gridSystemVisualSingles = new GridSystemVisualSingle[gridWidth, gridHeight, numOfFloors];
+        
+        for (int i = 0; i < gridWidth; i++)
+        {
+            for (int j = 0; j < gridHeight; j++)
+            {
+                for (int k = 0; k < numOfFloors; k++)
+                {
+                    GridPosition gridPos = new GridPosition(i, j,k);
+
+                    gridSystemVisualSingles[i, j,k] = Instantiate(gridSystemVisualSinglePrefab, LevelGrid.Instance.GetWorldFromGridPosition(gridPos), Quaternion.identity).GetComponent<GridSystemVisualSingle>();
+                }
                 
             }
         }
@@ -55,15 +59,15 @@ public class GridSystemVisual : MonoBehaviour
 
         UpdateGridVisuals();
 
-        //Show all grid pos
-        int gridWidth = LevelGrid.Instance.GetGridWidth();
-        int gridHeight = LevelGrid.Instance.GetGridHeight();
-
         for (int x = 0; x < gridWidth; x++)
         {
             for (int z = 0; z < gridHeight; z++)
             {
-                gridSystemVisualSingles[x, z].Show(GetGridVisualTypeMaterial(GridVisualType.Green));
+                for (int y = 0; y < numOfFloors; z++)
+                {
+
+                    gridSystemVisualSingles[x, z,y].Show(GetGridVisualTypeMaterial(GridVisualType.Green));
+                }
             }
         }
     }
@@ -96,7 +100,7 @@ public class GridSystemVisual : MonoBehaviour
 
         if (LevelGrid.Instance.IsValidGridPosition(currGridPos))
         {
-            lastSelected = gridSystemVisualSingles[currGridPos.x, currGridPos.y];
+            lastSelected = gridSystemVisualSingles[currGridPos.x, currGridPos.y,currGridPos.floor];
         }
 
         if (lastSelected != null)
@@ -107,18 +111,25 @@ public class GridSystemVisual : MonoBehaviour
 
     public void HideAllGridPositions()
     {
-        for (int i = 0; i < LevelGrid.Instance.GetGridWidth(); i++)
+        int gridWidth = LevelGrid.Instance.GetGridWidth();
+        int gridHeight = LevelGrid.Instance.GetGridHeight();
+        int gridFloors = LevelGrid.Instance.GetNumberOfFloors();
+
+        for (int i = 0; i < gridWidth; i++)
         {
-            for (int j = 0; j < LevelGrid.Instance.GetGridHeight(); j++)
+            for (int j = 0; j < gridHeight; j++)
             {
-                gridSystemVisualSingles[i,j].Hide();
+                for (int k = 0; k < gridFloors; k++)
+                {
+                    gridSystemVisualSingles[i, j, k].Hide();
+                }                
             }
         }
     }
 
     public void ShowGridPositions(List<GridPosition> gridPositions, GridVisualType gridVisualType)
     {
-        gridPositions.ForEach(gridPosition => { gridSystemVisualSingles[gridPosition.x, gridPosition.y].Show(GetGridVisualTypeMaterial( gridVisualType)); });
+        gridPositions.ForEach(gridPosition => { gridSystemVisualSingles[gridPosition.x, gridPosition.y,gridPosition.floor].Show(GetGridVisualTypeMaterial( gridVisualType)); });
     }
 
     public void UpdateGridVisuals() 
