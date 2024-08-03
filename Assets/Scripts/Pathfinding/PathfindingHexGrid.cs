@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -13,8 +14,9 @@ public class PathfindingHexGrid : MonoBehaviour
     private int width;
     private int height;
     private float cellSize;
+    private int numberOfFloors;
 
-    private GridSystemHex<PathNode> gridSystem;
+    private List<GridSystemHex<PathNode>> gridSystemList;
 
     [SerializeField]
     private Transform gridDebugObject;
@@ -50,25 +52,29 @@ public class PathfindingHexGrid : MonoBehaviour
         //init opened and closed nodes
         List<PathNode> openPathNodes = new List<PathNode>();
         List<PathNode> closedPathNodes = new List<PathNode>();
-
-        //get start node from grid pos
-        PathNode startPathNode = gridSystem.GetGridObjectFromGridPos(startGridPos);
+        GridSystemHex<PathNode> startingGridSystemHex = GedGridSystemOnTheFloor(startGridPos.floor);
+        GridSystemHex<PathNode> targetGridSystemHex = GedGridSystemOnTheFloor(endGridPos.floor);
+       //get start node from grid pos
+       PathNode startPathNode = startingGridSystemHex.GetGridObjectFromGridPos(startGridPos);
 
         //get end node from grid pos
-        PathNode endPathNode = gridSystem.GetGridObjectFromGridPos(endGridPos);
+        PathNode endPathNode = targetGridSystemHex.GetGridObjectFromGridPos(endGridPos);
 
         //add start node to opened list first 
         openPathNodes.Add(startPathNode);
 
         //initialization
-        for (int x = 0; x < gridSystem.GetWidth(); x++)
+        //added temp index for the floor
+        for (int x = 0; x < gridSystemList[0].GetWidth(); x++)
         {
-            for (int y = 0; y < gridSystem.GetHeight(); y++)
+            //added temp index for the floor
+            for (int y = 0; y < gridSystemList[0].GetHeight(); y++)
             {
 
                 //TODO: change later to consider different floors
                 GridPosition currGridPos = new GridPosition(x, y, 0);
-                PathNode currPathNode = gridSystem.GetGridObjectFromGridPos(currGridPos);
+                //added temp index for the floor
+                PathNode currPathNode = gridSystemList[0].GetGridObjectFromGridPos(currGridPos);
 
                 //for some reason set path cost to max int
                 currPathNode.SetGCost(int.MaxValue);
@@ -304,14 +310,22 @@ public class PathfindingHexGrid : MonoBehaviour
     }
 
     //sets width, height in number of grid cells of cellSize size, it's called in levelGrid->Start method
-    public void Setup(int width, int height, float cellSize)
+    public void Setup(int width, int height, float cellSize, int numberOfFloors)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
+        this.numberOfFloors = numberOfFloors;
+        
+        this.gridSystemList = new List<GridSystemHex<PathNode>>();
 
-        //TODO: change later to consider different floors
-        gridSystem = new GridSystemHex<PathNode>(width, height, cellSize, 0, LevelGrid.FLOOR_HEIGHT,(GridSystemHex<PathNode> GridSystem, GridPosition gp) => new PathNode(gp));
+        for (int i = 0; i < numberOfFloors; i++)
+        {
+            //TODO: change later to consider different floors
+            GridSystemHex<PathNode> tempPathfindingGridSystem = new GridSystemHex<PathNode>(width, height, cellSize, i, LevelGrid.FLOOR_HEIGHT, (GridSystemHex<PathNode> GridSystem, GridPosition gp) => new PathNode(gp));
+            gridSystemList.Add(tempPathfindingGridSystem);
+        }
+
 
 
         //gridSystem.CreateDebugObjects(gridDebugObject);
@@ -324,17 +338,21 @@ public class PathfindingHexGrid : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
-
-                //TODO: change later to consider different floors
-                GridPosition tempGridPos = new GridPosition(i, j, 0);
-                Vector3 tempGridPosWorldPos = LevelGrid.Instance.GetWorldFromGridPosition(tempGridPos);
-
-                float raycastOffsetDistance = 5f;
-
-                //raycasting doesn't work from the inside of a collider, so we're offseting the starting point; starting point is under the grid position; this could be avoided by turning on the "Queries Hit Backfaces" option in proj settings>physics
-                if (Physics.Raycast(tempGridPosWorldPos + Vector3.down * raycastOffsetDistance, Vector3.up, raycastOffsetDistance * 2, obstaclesLayerMask))
+                for(int k = 0; k < numberOfFloors; k++)
                 {
-                    GetPathNodeOnGridPosition(i, j).SetIsWalkable(false);
+                    //TODO: change later to consider different floors
+                    GridPosition tempGridPos = new GridPosition(i, j, k);               
+                
+                    Vector3 tempGridPosWorldPos = LevelGrid.Instance.GetWorldFromGridPosition(tempGridPos);
+
+                    //we've changed this from 5 to 1 so that it doesn't get tiles from different floor since the height of the floor is around
+                    float raycastOffsetDistance = 1f;
+
+                    //raycasting doesn't work from the inside of a collider, so we're offseting the starting point; starting point is under the grid position; this could be avoided by turning on the "Queries Hit Backfaces" option in proj settings>physics
+                    if (Physics.Raycast(tempGridPosWorldPos + Vector3.down * raycastOffsetDistance, Vector3.up, raycastOffsetDistance * 2, obstaclesLayerMask))
+                    {
+                        GetPathNodeOnGridPosition(i, j, k).SetIsWalkable(false);
+                    }
                 }
             }
         }
@@ -346,33 +364,40 @@ public class PathfindingHexGrid : MonoBehaviour
 
         //TODO: change later to consider different floors
         GridPosition gridPos = new GridPosition(x, y, 0);
-        if (gridSystem.IsValidGridPosition(gridPos) && gridSystem.GetGridObjectFromGridPos(gridPos).GetIsWalkable())
+        //added temp index for the floor
+        if (gridSystemList[0].IsValidGridPosition(gridPos) && gridSystemList[0].GetGridObjectFromGridPos(gridPos).GetIsWalkable())
         {
             if (!LevelGrid.Instance.IsGridPositionOccupied(gridPos))
             {
-                neighboursList.Add(gridSystem.GetGridObjectFromGridPos(gridPos));
+                //added temp index for the floor
+                neighboursList.Add(gridSystemList[0].GetGridObjectFromGridPos(gridPos));
             }
             else
             {
-                closedNodes.Add(gridSystem.GetGridObjectFromGridPos(gridPos));
+                //added temp index for the floor
+                closedNodes.Add(gridSystemList[0].GetGridObjectFromGridPos(gridPos));
             }
         }
     }
+    private GridSystemHex<PathNode> GedGridSystemOnTheFloor(int floor)
+    {
+        return gridSystemList[floor];
+    }
 
-    private PathNode GetPathNodeOnGridPosition(int x, int y)
+    private PathNode GetPathNodeOnGridPosition(int x, int y, int floor)
     {
         //TODO: change later to consider different floors
-        return gridSystem.GetGridObjectFromGridPos(new GridPosition(x, y, 0));
+        return GedGridSystemOnTheFloor(floor).GetGridObjectFromGridPos(new GridPosition(x, y, floor));
     }
 
     public bool IsGridPositionWalkable(GridPosition gridPos)
     {
-        return GetPathNodeOnGridPosition(gridPos.x, gridPos.y).GetIsWalkable();
+        return GetPathNodeOnGridPosition(gridPos.x, gridPos.y, gridPos.floor).GetIsWalkable();
     }
 
     public void SetGridPositionWalkable(GridPosition gridPos, bool isWalkableVal)
     {
-        GetPathNodeOnGridPosition(gridPos.x, gridPos.y).SetIsWalkable(isWalkableVal);
+        GetPathNodeOnGridPosition(gridPos.x, gridPos.y, gridPos.floor).SetIsWalkable(isWalkableVal);
     }
 
     public bool HasAPath(GridPosition a, GridPosition b)
