@@ -35,7 +35,11 @@ public class CameraController : MonoBehaviour
         targetFollowOffset = transposer.m_FollowOffset;
 
         //on new selected unit focus on it
-        UnitActionSystem.Instance.OnSelectedUnitChanged += OnSelectedUnitChanged_CameraController;
+        if (UnitActionSystem.Instance)
+        {
+            UnitActionSystem.Instance.OnSelectedUnitChanged += OnSelectedUnitChanged_CameraController;
+        }
+        
     }
 
     private void OnSelectedUnitChanged_CameraController(object sender, EventArgs e)
