@@ -8,7 +8,7 @@ namespace Assets.Scripts
 {
     public interface IInteractible
     {
-        public void Interact(Action onInteractionComplete);
+        public void Interact(Unit interactingUnit, Action onInteractionComplete);
 
     }
 }

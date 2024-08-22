@@ -103,6 +103,23 @@ public class Unit : MonoBehaviour, ICanTakeDamage
 
     public BaseAction[] GetAllUnitActions() { return unitActions; }
 
+    public void UpdateAllAbilities()
+    { 
+        AddNewUnitAction();
+        UnitAnimationManager unitAnimationManager = GetComponent<UnitAnimationManager>();
+        if (unitAnimationManager != null)
+        {
+            unitAnimationManager.UpdateActionAnimations();
+        }
+
+        UnitActionSystem.Instance.ResetAbilityUI();
+
+    }
+    public void AddNewUnitAction()
+    {
+        unitActions = GetComponents<BaseAction>();
+    }
+
     public bool CanSpendActionPointsToTakeAction(BaseAction action)
     {
         return currentActionPoints >= action.GetActionCost();       

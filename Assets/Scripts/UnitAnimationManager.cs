@@ -25,15 +25,20 @@ public class UnitAnimationManager : MonoBehaviour
         if (TryGetComponent<MoveAction>(out MoveAction moveAction))
         {
             moveAction.OnStartMoving += OnStartMoving_AnimationManager;
-            
+
             if (unitAnimator != null)
             {
                 unitAnimator.SetBool("IsRunning", false);
             }
-            
+
             moveAction.OnStopMoving += OnStopMoving_AnimationManager;
         }
 
+        UpdateActionAnimations();
+    }
+
+    public void UpdateActionAnimations()
+    {
         if (TryGetComponent<ShootAction>(out ShootAction shootAction))
         {
             shootAction.OnStartShooting += OnStartShooting_AnimationManager;
@@ -41,7 +46,7 @@ public class UnitAnimationManager : MonoBehaviour
 
         if (TryGetComponent<AreaShootAction>(out AreaShootAction areaShootAction))
         {
-            areaShootAction.OnStartShooting += OnStartAreaShooting_AnimationManager;            
+            areaShootAction.OnStartShooting += OnStartAreaShooting_AnimationManager;
         }
 
         if (TryGetComponent<MeleeAction>(out MeleeAction meleeAction))

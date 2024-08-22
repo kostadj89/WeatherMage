@@ -26,7 +26,7 @@ public class GridDebugObjectPathfinding : GridDebugObject
         hCost.text = pathNode.GetHCost().ToString();
         fCost.text = pathNode.GetFCost().ToString();
 
-        walkableCellSpriteRenderer.color = pathNode.GetIsWalkable()? Color.green.WithAlpha(0.01f) : Color.red.WithAlpha(0.01f);        
+        //walkableCellSpriteRenderer.color = pathNode.GetIsWalkable()? Color.green.WithAlpha(0.01f) : Color.red.WithAlpha(0.01f);        
     }
 
     public override void SetGridObject(object gridObject)

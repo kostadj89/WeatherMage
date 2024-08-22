@@ -276,12 +276,41 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 356991232011983836}
   m_SourcePrefab: {fileID: 100100000, guid: 07c615ce4e0da4148905f4b5893f270b, type: 3}
+--- !u!1 &1999825601052907560 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8102248886337901472, guid: 07c615ce4e0da4148905f4b5893f270b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7759762248251476872}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8530086263161449682 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2148431314543011674, guid: 07c615ce4e0da4148905f4b5893f270b,
     type: 3}
   m_PrefabInstance: {fileID: 7759762248251476872}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8534583446129595540 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2143951792390528796, guid: 07c615ce4e0da4148905f4b5893f270b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7759762248251476872}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-3769494298841488823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8534583446129595540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9430b1ae70783954bbb30df7d8f029ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSwordRadius: 1
+  meleeDamage: 10
+  isEquippedAsItem: 0
+  isMaterializing: 1
+  itemVisual: {fileID: 1999825601052907560}
 --- !u!4 &8534583446129595547 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2143951792390528787, guid: 07c615ce4e0da4148905f4b5893f270b,

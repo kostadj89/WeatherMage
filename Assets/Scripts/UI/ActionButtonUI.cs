@@ -12,6 +12,8 @@ public class ActionButtonUI : MonoBehaviour
     private Button button;
     [SerializeField]
     private GameObject selectedImage;
+    [SerializeField]
+    private Image actionIcon;
 
     private BaseAction baseAction;
 
@@ -19,6 +21,7 @@ public class ActionButtonUI : MonoBehaviour
     {
         this.baseAction = baseAction;
         textMeshProUGUI.text = baseAction.GetActionName();
+        actionIcon.sprite = baseAction.GetActionIcon();
         button.onClick.AddListener(() => { UnitActionSystem.Instance.SetSelectedAction(baseAction); });
     }
 

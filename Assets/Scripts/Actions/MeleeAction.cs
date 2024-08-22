@@ -14,7 +14,7 @@ public class MeleeAction : BaseAction
     [SerializeField]
     private int maxSwordRadius =1;
     [SerializeField]
-    private int meleeDamage = 1;
+    private int meleeDamage = 10;
 
 
     private ICanTakeDamage potentionalTarget;
@@ -108,10 +108,38 @@ public class MeleeAction : BaseAction
     // Start is called before the first frame update
     void Start()
     {
-        if (itemVisual != null) 
-        { 
-            SetStartingItemVisibility();
+        if (itemVisual == null) 
+        {
+            itemVisual = FindInChildren(gameObject.transform, "MagicSword");
+            MeshRenderer meshRenderer = itemVisual.GetComponent<MeshRenderer>();
+            meshRenderer.enabled = true;
+
+            TrailRenderer[] trailRenderers = itemVisual.GetComponentsInChildren<TrailRenderer>();
+            foreach (TrailRenderer item in trailRenderers)
+            {
+                item.enabled = true;
+            }
         }
+
+        SetStartingItemVisibility();
+    }
+    // Recursively search for the child object with the specified name
+    private GameObject FindInChildren(Transform parent, string name)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == name)
+            {
+                return child.gameObject;
+            }
+
+            GameObject result = FindInChildren(child, name);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+        return null;
     }
 
     private void SetStartingItemVisibility()

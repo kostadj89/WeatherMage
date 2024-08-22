@@ -11,6 +11,7 @@ public class UnitActionSystem : MonoBehaviour
 
     public event EventHandler OnSelectedUnitChanged;
     public event EventHandler OnSelectedActionChanged;
+    public event EventHandler OnActionAdded;
     //public event EventHandler OnActionBusy;
     //public event EventHandler OnActionFree;
     public event EventHandler<bool> OnBusyChanged;
@@ -168,5 +169,10 @@ public class UnitActionSystem : MonoBehaviour
     public bool GetIsBusy()
     { 
         return isBusy; 
+    }
+
+    internal void ResetAbilityUI()
+    {
+        OnActionAdded?.Invoke(this, EventArgs.Empty);
     }
 }

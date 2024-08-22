@@ -18,7 +18,7 @@ public class Door : MonoBehaviour,IInteractible
     //added so that we can control action flow, ie so that the interact action is not ended instantly
     Action onInteractionComplete;
     private float timer;
-    public void Interact(Action onInteractionComplete)
+    public void Interact(Unit unit, Action onInteractionComplete)
     {
         isOpening = true;
         timer = 0.5f;

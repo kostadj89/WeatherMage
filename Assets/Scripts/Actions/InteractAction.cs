@@ -63,9 +63,9 @@ public class InteractAction : BaseAction
     {
         Debug.Log("Interact action");
         IInteractible interactible = LevelGrid.Instance.GetInteractibleAtGridPosition(gridPosition);
-        interactible.Interact(OnInteractionComplete);
+        interactible.Interact(this.unit, OnInteractionComplete);
 
-        ActionStart(OnCompleteAction);
+       ActionStart(OnCompleteAction);
     }
 
     private void OnInteractionComplete()

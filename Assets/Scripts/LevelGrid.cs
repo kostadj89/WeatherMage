@@ -22,6 +22,8 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private float cellSize = 2f;
     [SerializeField] private int numberOfFloors = 1;
 
+    [SerializeField] private bool showDebug = false;
+
     private List<IGridSystem<GridObject>> gridSystemList;
     [SerializeField]
     private bool isHex;
@@ -46,15 +48,22 @@ public class LevelGrid : MonoBehaviour
                 //Use hex
                 GridSystemHex<GridObject> gridSystemHex = new GridSystemHex<GridObject>(width, height, cellSize, i, FLOOR_HEIGHT, (GridSystemHex<GridObject> gs, GridPosition gp) => new GridObject(gs, gp));
                 gridSystemList.Add(gridSystemHex);
+                if (showDebug)
+                {
+                    gridSystemHex.CreateDebugObjects(gridDebugObjectPrefab);
+                }
             }
             else
             {
                 //Use square
                 GridSystemSquare<GridObject> gridSystemSquare = new GridSystemSquare<GridObject>(width, height, cellSize, i, FLOOR_HEIGHT, (GridSystemSquare<GridObject> gs, GridPosition gp) => new GridObject(gs, gp));
                 gridSystemList.Add(gridSystemSquare);
+                if (showDebug)
+                {
+                    gridSystemSquare.CreateDebugObjects(gridDebugObjectPrefab);
+                }
             }
         }
-        //gridSystem.CreateDebugObjects(gridDebugObjectPrefab);
     }
     // Start is called before the first frame update
     void Start()

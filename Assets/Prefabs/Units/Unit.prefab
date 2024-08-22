@@ -246,7 +246,6 @@ GameObject:
   - component: {fileID: -9037324105416926483}
   - component: {fileID: 3863818508511025050}
   - component: {fileID: 5663713223201764365}
-  - component: {fileID: -2076824960352354070}
   - component: {fileID: 531871304112553714}
   m_Layer: 7
   m_Name: Unit
@@ -408,23 +407,6 @@ MonoBehaviour:
   spellboltProjectilePrefab: {fileID: 1279203868380885394, guid: 2668aecb947f4544ba968b8a3244b09a,
     type: 3}
   projectileSpawnPoint: {fileID: 2143951792428461123}
---- !u!114 &-2076824960352354070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2143951792390528796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9430b1ae70783954bbb30df7d8f029ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSwordRadius: 1
-  meleeDamage: 75
-  isEquippedAsItem: 0
-  isMaterializing: 1
-  itemVisual: {fileID: 8102248886337901472}
 --- !u!114 &531871304112553714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,7 +460,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2395768823929325236}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -621,7 +603,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2804681085988160039}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1081,7 +1063,7 @@ GameObject:
   - component: {fileID: 6294951038851511596}
   - component: {fileID: 132777837691864848}
   m_Layer: 7
-  m_Name: MagicStaff
+  m_Name: MagicSword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1120,7 +1102,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8102248886337901472}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1165,10 +1147,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.13
+  m_Height: 1.51
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &8317810756807278964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,7 +1191,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8317810756807278964}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

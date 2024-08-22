@@ -103,7 +103,7 @@ public class CameraController : MonoBehaviour
         if (zoomScrollDelta != 0)
         {
             targetFollowOffset.y += -zoomAmount * Mathf.Sign(zoomScrollDelta);
-            targetFollowOffset.y = Mathf.Clamp(targetFollowOffset.y, MIN_FOLLOW_Y_OFFSET, MAX_FOLLOW_Y_OFFSET);
+            targetFollowOffset.y = Mathf.Clamp(targetFollowOffset.y, MIN_FOLLOW_Y_OFFSET, MAX_FOLLOW_Y_OFFSET*2);
         }
 
         transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, targetFollowOffset, Time.deltaTime * zoomSpeed);

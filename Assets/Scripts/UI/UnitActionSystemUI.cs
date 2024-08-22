@@ -20,6 +20,7 @@ public class UnitActionSystemUI : MonoBehaviour
     private void Awake()
     {
         UnitActionSystem.Instance.OnSelectedUnitChanged += ChangeActionsOnUnitSelection;
+        UnitActionSystem.Instance.OnActionAdded += ChangeActionsOnUnitSelection;
         UnitActionSystem.Instance.OnSelectedActionChanged += ChangeSelectedActionVisual;
         UnitActionSystem.Instance.OnActionStarted += UpdateActionPointsUIOnActionStarted;
         

@@ -59,17 +59,17 @@ public class GridSystemVisual : MonoBehaviour
 
         UpdateGridVisuals();
 
-        for (int x = 0; x < gridWidth; x++)
-        {
-            for (int z = 0; z < gridHeight; z++)
-            {
-                for (int y = 0; y < numOfFloors; z++)
-                {
+        //for (int x = 0; x < gridWidth; x++)
+        //{
+        //    for (int z = 0; z < gridHeight; z++)
+        //    {
+        //        for (int y = 0; y < numOfFloors; y++)
+        //        {
 
-                    gridSystemVisualSingles[x, z,y].Show(GetGridVisualTypeMaterial(GridVisualType.Green));
-                }
-            }
-        }
+        //            gridSystemVisualSingles[x, z,y].Show(GetGridVisualTypeMaterial(GridVisualType.Green));
+        //        }
+        //    }
+        //}
     }
 
     private void OnBusyChanged_GridSystemVisual(object sender, bool hideVisuals)

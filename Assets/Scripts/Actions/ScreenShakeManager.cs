@@ -23,4 +23,10 @@ public class ScreenShakeManager : MonoBehaviour
     {
         
     }
+
+    private void OnDestroy()
+    {
+        CustomProjectile.OnAnyProjectileDestroyed -= OnAnyProjectileDestroyed_ScreenShakeManager;
+    }
+
 }

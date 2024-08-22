@@ -101,5 +101,11 @@ public abstract class BaseAction : MonoBehaviour
 
     public abstract ScoredEnemyAIAction GetScoredEnemyAIActionOnGridPosition(GridPosition gridPos);
 
+    internal Sprite GetActionIcon()
+    {
+        //returning the icon of the action, from a folder called Icons
+        return Resources.Load<Sprite>("Icons/" + GetActionName());
+    }
+
     #endregion AI
 }

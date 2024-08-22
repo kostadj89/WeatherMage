@@ -6,7 +6,7 @@ using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class ActionCameraManager : MonoBehaviour
 {
     [SerializeField]
     private Transform actionCamera;
@@ -157,4 +157,18 @@ public class CameraManager : MonoBehaviour
         actionCamera.gameObject.SetActive(false);
        
     }
+
+    //private void OnLevelWasLoaded(int level)
+    //{
+    //    if (level ==1)
+    //    {
+    //        GameObject temp;
+    //        temp = GameObject.FindGameObjectWithTag("ActionCamera");
+
+    //        if (temp)
+    //        {
+    //            actionCamera = temp.transform;
+    //        }            
+    //    }
+    //}
 }
