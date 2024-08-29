@@ -21,7 +21,7 @@ public class PreparePrefabForRagdoll : EditorWindow
     {
         GUILayout.Label("Create Prefab For Ragdoll", EditorStyles.boldLabel);
 
-        newPrefabPath = "E:\\GameDev\\TurnBased3D\\WeatherMage\\Assets\\Prefabs";
+        newPrefabPath = "D:\\GameDev\\TurnBased3D\\WeatherMage\\Assets\\Prefabs";
         // Show the current path in a label
         EditorGUILayout.LabelField("Current Path: " + newPrefabPath);
         

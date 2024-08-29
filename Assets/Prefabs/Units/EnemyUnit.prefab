@@ -133,6 +133,12 @@ PrefabInstance:
       propertyPath: healthMax
       value: 120
       objectReference: {fileID: 0}
+    - target: {fileID: 2028332094940008822, guid: 07c615ce4e0da4148905f4b5893f270b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 2e4eea512b6b0c5478ce82720fb94e90,
+        type: 3}
     - target: {fileID: 2143951792390528786, guid: 07c615ce4e0da4148905f4b5893f270b,
         type: 3}
       propertyPath: isEnemy
@@ -226,7 +232,7 @@ PrefabInstance:
     - target: {fileID: 2145282182112514646, guid: 07c615ce4e0da4148905f4b5893f270b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2145459560667084248, guid: 07c615ce4e0da4148905f4b5893f270b,
         type: 3}
